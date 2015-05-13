@@ -1,5 +1,6 @@
 include(../../qtcreatorplugin.pri)
 
+DEFINES -= QT_NO_CAST_FROM_ASCII
 DEFINES += \
     NIMEDITOR_LIBRARY
 

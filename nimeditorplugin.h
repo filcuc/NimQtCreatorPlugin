@@ -17,15 +17,6 @@ public:
 
     virtual bool initialize(const QStringList &arguments, QString *errorMessage);
     virtual void extensionsInitialized() {}
-
-    static QSet<QString> keywords();
-    static QSet<QString> magics();
-    static QSet<QString> builtins();
-
-private:
-    QSet<QString> m_keywords;
-    QSet<QString> m_magics;
-    QSet<QString> m_builtins;
 };
 
 } // namespace Internal

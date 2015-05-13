@@ -1,33 +1,3 @@
-/****************************************************************************
-**
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
-**
-** This file is part of Qt Creator.
-**
-** Commercial License Usage
-** Licensees holding valid commercial Qt licenses may use this file in
-** accordance with the commercial license agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
-**
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
-**
-****************************************************************************/
-
 #include "nimscanner.h"
 #include "../../nimeditorconstants.h"
 #include "../../nimeditorplugin.h"
@@ -38,30 +8,27 @@
 namespace NimEditor {
 namespace Internal {
 
-Scanner::Scanner(const QChar *text, const int length)
+NimScanner::NimScanner(const QChar *text, const int length)
     : m_src(text, length)
     , m_state(0)
-    , m_keywords(NimEditorPlugin::keywords())
-    , m_magics(NimEditorPlugin::magics())
-    , m_builtins(NimEditorPlugin::builtins())
 {
 }
 
-Scanner::~Scanner()
+NimScanner::~NimScanner()
 {
 }
 
-void Scanner::setState(int state)
+void NimScanner::setState(int state)
 {
     m_state = state;
 }
 
-int Scanner::state() const
+int NimScanner::state() const
 {
     return m_state;
 }
 
-FormatToken Scanner::read()
+FormatToken NimScanner::read()
 {
     m_src.setAnchor();
     if (m_src.isEnd())
@@ -80,12 +47,62 @@ FormatToken Scanner::read()
     }
 }
 
-QString Scanner::value(const FormatToken &tk) const
+QString NimScanner::value(const FormatToken &tk) const
 {
     return m_src.value(tk.begin(), tk.length());
 }
 
-FormatToken Scanner::onDefaultState()
+const QSet<QString>&NimScanner::keywords()
+{
+    static QSet<QString> result {
+        "addr", "and", "as", "asm", "atomic",
+        "break", "block", "bind",
+        "case", "cast", "concept", "const", "continue",
+        "defer", "discard", "distinct", "div", "do",
+        "elif", "else", "end", "enum", "except", "export",
+        "finally", "for", "from", "func",
+        "generic",
+        "if", "import", "in", "include", "is", "isnot", "iterator",
+        "let",
+        "macro", "method", "mixin", "mod",
+        "nil", "not", "notin",
+        "object", "of", "or", "out",
+        "proc", "ptr",
+        "raise", "ref", "return",
+        "shl", "shr", "static",
+        "template", "try", "tuple", "type",
+        "using",
+        "var",
+        "when", "while", "with", "without",
+        "xor",
+        "yield"
+    };
+    return result;
+}
+
+const QSet<QString>&NimScanner::magics()
+{
+    static QSet<QString> result {};
+    return result;
+}
+
+const QSet<QString>&NimScanner::builtins()
+{
+    static QSet<QString> result {
+        "int", "cint",
+        "float", "cfloat",
+        "long", "clong",
+        "bool", "cbool",
+        "string", "cstring",
+        "range",
+        "true", "false", "len",
+        "low", "high", "add",
+        "pop", "ord", "echo"
+    };
+    return result;
+}
+
+FormatToken NimScanner::onDefaultState()
 {
     QChar first = m_src.peek();
     m_src.move();
@@ -123,7 +140,7 @@ FormatToken Scanner::onDefaultState()
  * @brief Lexer::passEscapeCharacter
  * @return returns true if escape sequence doesn't end with newline
  */
-void Scanner::checkEscapeSequence(QChar quoteChar)
+void NimScanner::checkEscapeSequence(QChar quoteChar)
 {
     if (m_src.peek() == QLatin1Char('\\')) {
         m_src.move();
@@ -136,7 +153,7 @@ void Scanner::checkEscapeSequence(QChar quoteChar)
 /**
   reads single-line string literal, surrounded by ' or " quotes
   */
-FormatToken Scanner::readStringLiteral(QChar quoteChar)
+FormatToken NimScanner::readStringLiteral(QChar quoteChar)
 {
     QChar ch = m_src.peek();
     if (ch == quoteChar && m_src.peek(1) == quoteChar) {
@@ -158,7 +175,7 @@ FormatToken Scanner::readStringLiteral(QChar quoteChar)
 /**
   reads multi-line string literal, surrounded by ''' or """ sequencies
   */
-FormatToken Scanner::readMultiLineStringLiteral(QChar quoteChar)
+FormatToken NimScanner::readMultiLineStringLiteral(QChar quoteChar)
 {
     for (;;) {
         QChar ch = m_src.peek();
@@ -182,7 +199,7 @@ FormatToken Scanner::readMultiLineStringLiteral(QChar quoteChar)
 /**
   reads identifier and classifies it
   */
-FormatToken Scanner::readIdentifier()
+FormatToken NimScanner::readIdentifier()
 {
     QChar ch = m_src.peek();
     while (ch.isLetterOrNumber() || (ch == QLatin1Char('_'))) {
@@ -194,11 +211,11 @@ FormatToken Scanner::readIdentifier()
     Format tkFormat = Format_Identifier;
     if (value == QLatin1String("self"))
         tkFormat = Format_ClassField;
-    else if (m_builtins.contains(value))
+    else if (NimScanner::builtins().contains(value))
         tkFormat = Format_Type;
-    else if (m_magics.contains(value))
+    else if (NimScanner::magics().contains(value))
         tkFormat = Format_MagicAttr;
-    else if (m_keywords.contains(value))
+    else if (NimScanner::keywords().contains(value))
         tkFormat = Format_Keyword;
 
     return FormatToken(tkFormat, m_src.anchor(), m_src.length());
@@ -226,7 +243,7 @@ inline static bool isValidIntegerSuffix(QChar ch)
     return (ch == QLatin1Char('l') || ch == QLatin1Char('L'));
 }
 
-FormatToken Scanner::readNumber()
+FormatToken NimScanner::readNumber()
 {
     if (!m_src.isEnd()) {
         QChar ch = m_src.peek();
@@ -251,7 +268,7 @@ FormatToken Scanner::readNumber()
     return FormatToken(Format_Number, m_src.anchor(), m_src.length());
 }
 
-FormatToken Scanner::readFloatNumber()
+FormatToken NimScanner::readFloatNumber()
 {
     enum
     {
@@ -303,7 +320,7 @@ FormatToken Scanner::readFloatNumber()
 /**
   reads single-line python comment, started with "#"
   */
-FormatToken Scanner::readComment()
+FormatToken NimScanner::readComment()
 {
     QChar ch = m_src.peek();
     while (ch != QLatin1Char('\n') && !ch.isNull()) {
@@ -316,7 +333,7 @@ FormatToken Scanner::readComment()
 /**
   reads single-line python doxygen comment, started with "##"
   */
-FormatToken Scanner::readDoxygenComment()
+FormatToken NimScanner::readDoxygenComment()
 {
     QChar ch = m_src.peek();
     while (ch != QLatin1Char('\n') && !ch.isNull()) {
@@ -329,7 +346,7 @@ FormatToken Scanner::readDoxygenComment()
 /**
   reads whitespace
   */
-FormatToken Scanner::readWhiteSpace()
+FormatToken NimScanner::readWhiteSpace()
 {
     while (m_src.peek().isSpace())
         m_src.move();
@@ -339,7 +356,7 @@ FormatToken Scanner::readWhiteSpace()
 /**
   reads punctuation symbols, excluding some special
   */
-FormatToken Scanner::readOperator()
+FormatToken NimScanner::readOperator()
 {
     const QString EXCLUDED_CHARS = QLatin1String("\'\"_#");
     QChar ch = m_src.peek();
@@ -350,17 +367,17 @@ FormatToken Scanner::readOperator()
     return FormatToken(Format_Operator, m_src.anchor(), m_src.length());
 }
 
-void Scanner::clearState()
+void NimScanner::clearState()
 {
     m_state = 0;
 }
 
-void Scanner::saveState(State state, QChar savedData)
+void NimScanner::saveState(State state, QChar savedData)
 {
     m_state = (state << 16) | static_cast<int>(savedData.unicode());
 }
 
-void Scanner::parseState(State &state, QChar &savedData) const
+void NimScanner::parseState(State &state, QChar &savedData) const
 {
     state = static_cast<State>(m_state >> 16);
     savedData = static_cast<ushort>(m_state);

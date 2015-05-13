@@ -5,7 +5,7 @@
 namespace NimEditor {
 namespace Internal {
 
-class Scanner;
+class NimScanner;
 
 class NimHighlighter : public TextEditor::SyntaxHighlighter
 {
@@ -17,7 +17,7 @@ protected:
 
 private:
     int highlightLine(const QString &text, int initialState);
-    void highlightImport(Internal::Scanner &scanner);
+    void highlightImport(Internal::NimScanner &scanner);
 };
 
 } // namespace Internal

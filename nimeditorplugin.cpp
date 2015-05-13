@@ -17,137 +17,47 @@
 
 using namespace NimEditor::Constants;
 
-/*******************************************************************************
- * List of Python keywords (includes "print" that isn't keyword in python 3
- ******************************************************************************/
-static const char *const LIST_OF_PYTHON_KEYWORDS[] = {
-    "and",
-    "as",
-    "assert",
-    "break",
-    "class",
-    "continue",
-    "def",
-    "del",
-    "elif",
-    "else",
-    "except",
-    "exec",
-    "finally",
-    "for",
-    "from",
-    "global",
-    "if",
-    "import",
-    "in",
-    "is",
-    "lambda",
-    "not",
-    "or",
-    "pass",
-    "print",
-    "raise",
-    "return",
-    "try",
-    "while",
-    "with",
+static const char *const LIST_OF_NIM_KEYWORDS[] = {
+    "addr", "and", "as", "asm", "atomic",
+    "break", "block", "bind",
+    "case", "cast", "concept", "const", "continue",
+    "defer", "discard", "distinct", "div", "do",
+    "elif", "else", "end", "enum", "except", "export",
+    "finally", "for", "from", "func",
+    "generic",
+    "if", "import", "in", "include", "is", "isnot", "iterator",
+    "let",
+    "macro", "method", "mixin", "mod",
+    "nil", "not", "notin",
+    "object", "of", "or", "out",
+    "proc", "ptr",
+    "raise", "ref", "return",
+    "shl", "shr", "static",
+    "template", "try", "tuple", "type",
+    "using",
+    "var",
+    "when", "while", "with", "without",
+    "xor",
     "yield"
 };
 
-/*******************************************************************************
- * List of Python magic methods and attributes
- ******************************************************************************/
-static const char *const LIST_OF_PYTHON_MAGICS[] = {
-    // ctor & dtor
-    "__init__",
-    "__del__",
-    // string conversion functions
-    "__str__",
-    "__repr__",
-    "__unicode__",
-    // attribute access functions
-    "__setattr__",
-    "__getattr__",
-    "__delattr__",
-    // binary operators
-    "__add__",
-    "__sub__",
-    "__mul__",
-    "__truediv__",
-    "__floordiv__",
-    "__mod__",
-    "__pow__",
-    "__and__",
-    "__or__",
-    "__xor__",
-    "__eq__",
-    "__ne__",
-    "__gt__",
-    "__lt__",
-    "__ge__",
-    "__le__",
-    "__lshift__",
-    "__rshift__",
-    "__contains__",
-    // unary operators
-    "__pos__",
-    "__neg__",
-    "__inv__",
-    "__abs__",
-    "__len__",
-    // item operators like []
-    "__getitem__",
-    "__setitem__",
-    "__delitem__",
-    "__getslice__",
-    "__setslice__",
-    "__delslice__",
-    // other functions
-    "__cmp__",
-    "__hash__",
-    "__nonzero__",
-    "__call__",
-    "__iter__",
-    "__reversed__",
-    "__divmod__",
-    "__int__",
-    "__long__",
-    "__float__",
-    "__complex__",
-    "__hex__",
-    "__oct__",
-    "__index__",
-    "__copy__",
-    "__deepcopy__",
-    "__sizeof__",
-    "__trunc__",
-    "__format__",
-    // magic attributes
-    "__name__",
-    "__module__",
-    "__dict__",
-    "__bases__",
-    "__doc__"
-};
+static const char *const LIST_OF_NIM_MAGICS[] = {};
 
-/*******************************************************************************
- * List of python built-in functions and objects
- ******************************************************************************/
-static const char *const LIST_OF_PYTHON_BUILTINS[] = {
+static const char *const LIST_OF_NIM_BUILTINS[] = {
     "range",
-    "xrange",
-    "int",
-    "float",
-    "long",
-    "hex",
-    "oct"
-    "chr",
-    "ord",
+    "int", "cint",
+    "float", "cfloat",
+    "long", "clong",
+    "bool", "cbool",
+    "string", "cstring",
+    "true", "false",
     "len",
-    "abs",
-    "None",
-    "True",
-    "False"
+    "low",
+    "high",
+    "add",
+    "pop",
+    "ord",
+    "echo"
 };
 
 namespace NimEditor {
@@ -166,9 +76,6 @@ static void copyIdentifiers(const char * const words[], size_t bytesCount, QSet<
 NimEditorPlugin::NimEditorPlugin()
 {
     m_instance = this;
-    copyIdentifiers(LIST_OF_PYTHON_KEYWORDS, sizeof(LIST_OF_PYTHON_KEYWORDS), m_keywords);
-    copyIdentifiers(LIST_OF_PYTHON_MAGICS, sizeof(LIST_OF_PYTHON_MAGICS), m_magics);
-    copyIdentifiers(LIST_OF_PYTHON_BUILTINS, sizeof(LIST_OF_PYTHON_BUILTINS), m_builtins);
 }
 
 NimEditorPlugin::~NimEditorPlugin()
@@ -192,21 +99,6 @@ bool NimEditorPlugin::initialize(const QStringList &arguments, QString *errorMes
         Core::FileIconProvider::registerIconOverlayForMimeType(icon, C_NIM_MIMETYPE);
 
     return true;
-}
-
-QSet<QString> NimEditorPlugin::keywords()
-{
-    return m_instance->m_keywords;
-}
-
-QSet<QString> NimEditorPlugin::magics()
-{
-    return m_instance->m_magics;
-}
-
-QSet<QString> NimEditorPlugin::builtins()
-{
-    return m_instance->m_builtins;
 }
 
 } // namespace Internal

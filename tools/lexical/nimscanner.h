@@ -9,13 +9,10 @@
 namespace NimEditor {
 namespace Internal {
 
-/**
- * @brief The Scanner class - scans source code for highlighting only
- */
-class Scanner
+class NimScanner
 {
-    Scanner(const Scanner &other);
-    void operator =(const Scanner &other);
+    NimScanner(const NimScanner &other);
+    void operator =(const NimScanner &other);
 
 public:
     enum State {
@@ -24,13 +21,18 @@ public:
         State_MultiLineString
     };
 
-    Scanner(const QChar *text, const int length);
-    ~Scanner();
+    NimScanner(const QChar *text, const int length);
+    ~NimScanner();
 
     void setState(int state);
     int state() const;
     FormatToken read();
     QString value(const FormatToken& tk) const;
+
+    static const QSet<QString>& keywords();
+    static const QSet<QString>& magics();
+    static const QSet<QString>& builtins();
+
 
 private:
     FormatToken onDefaultState();
@@ -52,9 +54,6 @@ private:
 
     SourceCodeStream m_src;
     int m_state;
-    const QSet<QString> m_keywords;
-    const QSet<QString> m_magics;
-    const QSet<QString> m_builtins;
 };
 
 } // namespace Internal

@@ -88,7 +88,7 @@ static bool isImportKeyword(const QString &keyword)
  */
 int NimHighlighter::highlightLine(const QString &text, int initialState)
 {
-    Scanner scanner(text.constData(), text.size());
+    NimScanner scanner(text.constData(), text.size());
     scanner.setState(initialState);
 
     FormatToken tk;
@@ -114,7 +114,7 @@ int NimHighlighter::highlightLine(const QString &text, int initialState)
 /**
  * @brief Highlights rest of line as import directive
  */
-void NimHighlighter::highlightImport(Scanner &scanner)
+void NimHighlighter::highlightImport(NimScanner &scanner)
 {
     FormatToken tk;
     while ((tk = scanner.read()).format() != Format_EndOfBlock) {

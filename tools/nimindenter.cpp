@@ -7,31 +7,15 @@
 
 namespace NimEditor {
 
-// Tab size hardcoded as PEP8 style guide requires, but can be moved to settings
-static const int TAB_SIZE = 4;
-
 NimIndenter::NimIndenter()
-{
-    m_jumpKeywords << QLatin1String("return")
-                   << QLatin1String("yield")
-                   << QLatin1String("break")
-                   << QLatin1String("continue")
-                   << QLatin1String("raise")
-                   << QLatin1String("pass");
-}
+{}
 
 NimIndenter::~NimIndenter()
-{
-}
+{}
 
-/**
- * @brief Does given character change indentation level?
- * @param ch Any value
- * @return True if character increases indentation level at the next line
- */
-bool NimIndenter::isElectricCharacter(const QChar &ch) const
+bool NimIndenter::isElectricCharacter(const QChar& ch) const
 {
-    return (ch == QLatin1Char(':'));
+    return NimIndenter::electricCharacters().contains(ch);
 }
 
 /**
@@ -58,7 +42,7 @@ void NimIndenter::indentBlock(QTextDocument *document,
         int indentation = settings.indentationColumn(previousLine);
 
         if (isElectricLine(previousLine))
-            indentation += TAB_SIZE;
+            indentation += NimIndenter::tabSize();
         else
             indentation = qMax<int>(0, indentation + getIndentDiff(previousLine));
 
@@ -67,6 +51,25 @@ void NimIndenter::indentBlock(QTextDocument *document,
         // First line in whole document
         settings.indentLine(block, 0);
     }
+}
+
+const QSet<QString>& NimIndenter::jumpKeywords()
+{
+    static QSet<QString> result {
+        QLatin1String("return"),
+        QLatin1String("yield"),
+        QLatin1String("break"),
+        QLatin1String("continue"),
+        QLatin1String("raise"),
+        QLatin1String("pass")
+    };
+    return result;
+}
+
+const QSet<QChar>&NimIndenter::electricCharacters()
+{
+    static QSet<QChar> result { ':', '=' };
+    return result;
 }
 
 /// @return True if electric character is last non-space character at given string
@@ -86,11 +89,11 @@ bool NimIndenter::isElectricLine(const QString &line) const
 /// @return negative indent diff if previous line breaks control flow branch
 int NimIndenter::getIndentDiff(const QString &previousLine) const
 {
-    Internal::Scanner sc(previousLine.constData(), previousLine.length());
+    Internal::NimScanner sc(previousLine.constData(), previousLine.length());
     forever {
         Internal::FormatToken tk = sc.read();
-        if ((tk.format() == Internal::Format_Keyword) && m_jumpKeywords.contains(sc.value(tk)))
-            return -TAB_SIZE;
+        if ((tk.format() == Internal::Format_Keyword) && NimIndenter::jumpKeywords().contains(sc.value(tk)))
+            return -NimIndenter::tabSize();
         if (tk.format() != Internal::Format_Whitespace)
             break;
     }
