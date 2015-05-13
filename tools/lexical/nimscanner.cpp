@@ -5,6 +5,17 @@
 #include <QString>
 #include <QSet>
 
+namespace {
+    QSet<QString> toLatin1Set(std::initializer_list<const char*> list)
+    {
+        QSet<QString> result;
+        result.reserve(list.size());
+        for (auto it = std::begin(list); it != std::end(list); ++it)
+            result.insert(QString::fromLatin1(*it));
+        return result;
+    }
+}
+
 namespace NimEditor {
 namespace Internal {
 
@@ -54,7 +65,7 @@ QString NimScanner::value(const FormatToken &tk) const
 
 const QSet<QString>&NimScanner::keywords()
 {
-    static QSet<QString> result {
+    static QSet<QString> result = ::toLatin1Set({
         "addr", "and", "as", "asm", "atomic",
         "break", "block", "bind",
         "case", "cast", "concept", "const", "continue",
@@ -76,7 +87,7 @@ const QSet<QString>&NimScanner::keywords()
         "when", "while", "with", "without",
         "xor",
         "yield"
-    };
+    });
     return result;
 }
 
@@ -88,7 +99,7 @@ const QSet<QString>&NimScanner::magics()
 
 const QSet<QString>&NimScanner::builtins()
 {
-    static QSet<QString> result {
+    static QSet<QString> result = ::toLatin1Set({
         "int", "cint",
         "float", "cfloat",
         "long", "clong",
@@ -98,7 +109,7 @@ const QSet<QString>&NimScanner::builtins()
         "true", "false", "len",
         "low", "high", "add",
         "pop", "ord", "echo"
-    };
+    });
     return result;
 }
 
