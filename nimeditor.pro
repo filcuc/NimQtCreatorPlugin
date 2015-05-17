@@ -13,12 +13,11 @@ HEADERS += \
     tools/lexical/sourcecodestream.h \
     tools/nimhighlighter.h \
     tools/nimindenter.h \
-    tools/lexical/nimformattoken.h \
-    tools/lexical/nimscanner.h
+    tools/nimlexer.h
 
 SOURCES += \
     nimeditorplugin.cpp \
     nimeditor.cpp \
     tools/nimhighlighter.cpp \
     tools/nimindenter.cpp \
-    tools/lexical/nimscanner.cpp
+    tools/nimlexer.cpp

@@ -1,5 +1,5 @@
 #include "nimindenter.h"
-#include "lexical/nimscanner.h"
+#include "nimlexer.h"
 
 #include <texteditor/tabsettings.h>
 
@@ -68,7 +68,7 @@ const QSet<QString>& NimIndenter::jumpKeywords()
 
 const QSet<QChar>&NimIndenter::electricCharacters()
 {
-    static QSet<QChar> result { ':', '=' };
+    static QSet<QChar> result { QLatin1Char(':'), QLatin1Char('=') };
     return result;
 }
 
@@ -89,15 +89,15 @@ bool NimIndenter::isElectricLine(const QString &line) const
 /// @return negative indent diff if previous line breaks control flow branch
 int NimIndenter::getIndentDiff(const QString &previousLine) const
 {
-    Internal::NimScanner sc(previousLine.constData(), previousLine.length());
-    forever {
-        Internal::FormatToken tk = sc.read();
-        if ((tk.format() == Internal::Format_Keyword) && NimIndenter::jumpKeywords().contains(sc.value(tk)))
-            return -NimIndenter::tabSize();
-        if (tk.format() != Internal::Format_Whitespace)
-            break;
-    }
-    return 0;
+//    Internal::NimScanner sc(previousLine.constData(), previousLine.length());
+//    forever {
+//        Internal::FormatToken tk = sc.read();
+//        if ((tk.format() == Internal::Format_Keyword) && NimIndenter::jumpKeywords().contains(sc.value(tk)))
+//            return -NimIndenter::tabSize();
+//        if (tk.format() != Internal::Format_Whitespace)
+//            break;
+//    }
+//    return 0;
 }
 
 } // namespace NimEditor

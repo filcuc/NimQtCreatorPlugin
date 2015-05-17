@@ -1,6 +1,7 @@
 #pragma once
 
 #include <texteditor/syntaxhighlighter.h>
+#include "nimlexer.h"
 
 namespace NimEditor {
 namespace Internal {
@@ -16,8 +17,10 @@ protected:
     void highlightBlock(const QString &text);
 
 private:
+    void initTextFormats();
+
+    int categoryForType(int type);
     int highlightLine(const QString &text, int initialState);
-    void highlightImport(Internal::NimScanner &scanner);
 };
 
 } // namespace Internal
