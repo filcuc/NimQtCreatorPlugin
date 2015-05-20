@@ -22,7 +22,7 @@ public:
             StringLiteral,
             MultiLineStringLiteral,
             Operator,
-            EndOfText,
+            EndOfText
         };
     };
 
