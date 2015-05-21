@@ -34,28 +34,13 @@ void NimIndenter::indentBlock(QTextDocument *document,
     }
 
     // Calculate indentation
+    int previousState = previousBlock.userState();
     QString previousLine = previousBlock.text();
-    NimLexer lexer(previousLine.constData(),
-                   previousLine.length(),
-                   static_cast<NimLexer::State>(previousBlock.userState()));
     int indentation = settings.indentationColumn(previousLine);
-    indentation += calculateIndentDiff(previousLine, lexer);
+    indentation += calculateIndentDiff(previousLine, previousState);
 
     // Sets indentation
     settings.indentLine(block, std::max(0, indentation));
-}
-
-const QSet<QString>& NimIndenter::jumpKeywords()
-{
-    static QSet<QString> result {
-        QLatin1String("return"),
-        QLatin1String("yield"),
-        QLatin1String("break"),
-        QLatin1String("continue"),
-        QLatin1String("raise"),
-        QLatin1String("pass")
-    };
-    return result;
 }
 
 const QSet<QChar>&NimIndenter::electricCharacters()
@@ -64,9 +49,9 @@ const QSet<QChar>&NimIndenter::electricCharacters()
     return result;
 }
 
-bool NimIndenter::startsBlock(const QString& line,
-                              NimLexer& lexer) const
+bool NimIndenter::startsBlock(const QString& line, int state) const
 {
+    NimLexer lexer(line.constData(), line.length(), static_cast<NimLexer::State>(state));
     NimLexer::Token previous;
     NimLexer::Token current = lexer.next();
     while (current.type != NimLexer::TokenType::EndOfText) {
@@ -91,9 +76,9 @@ bool NimIndenter::startsBlock(const QString& line,
     return false;
 }
 
-bool NimIndenter::endsBlock(const QString& line,
-                            NimLexer& lexer) const
+bool NimIndenter::endsBlock(const QString& line, int state) const
 {
+    NimLexer lexer(line.constData(), line.length(), static_cast<NimLexer::State>(state));
     NimLexer::Token previous;
     NimLexer::Token current = lexer.next();
     while (current.type != NimLexer::TokenType::EndOfText) {
@@ -111,16 +96,15 @@ bool NimIndenter::endsBlock(const QString& line,
     return false;
 }
 
-int NimIndenter::calculateIndentDiff(const QString &previousLine,
-                                     NimLexer& lexer) const
+int NimIndenter::calculateIndentDiff(const QString &previousLine, int state) const
 {
     if (previousLine.isEmpty())
         return 0;
 
-    if (startsBlock(previousLine, lexer))
+    if (startsBlock(previousLine, state))
         return NimIndenter::tabSize();
 
-    if (endsBlock(previousLine, lexer))
+    if (endsBlock(previousLine, state))
         return -NimIndenter::tabSize();
 
     return 0;

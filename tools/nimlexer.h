@@ -23,6 +23,7 @@ public:
             StringLiteral,
             MultiLineStringLiteral,
             Operator,
+            Number,
             EndOfText
         };
     };
@@ -60,25 +61,28 @@ private:
     Token onDefaultState();
     Token onMultiLineStringState();
 
-    bool isSkipChar(SourceCodeStream* stream);
+    bool isSkipChar();
 
-    bool isOperator(SourceCodeStream* stream);
-    Token readOperator(SourceCodeStream* stream);
+    bool isOperator();
+    Token readOperator();
 
-    bool matchCommentStart(SourceCodeStream* stream);
-    Token readComment(SourceCodeStream* stream);
+    bool matchCommentStart();
+    Token readComment();
 
-    bool matchDocumentationStart(SourceCodeStream* stream);
-    Token readDocumentation(SourceCodeStream* stream);
+    bool matchDocumentationStart();
+    Token readDocumentation();
 
-    bool matchIdentifierOrKeywordStart(SourceCodeStream* stream);
-    Token readIdentifierOrKeyword(SourceCodeStream* stream);
+    bool matchNumber();
+    Token readNumber();
 
-    bool matchStringLiteralStart(SourceCodeStream* stream);
-    Token readStringLiteral(SourceCodeStream* stream);
+    bool matchIdentifierOrKeywordStart();
+    Token readIdentifierOrKeyword();
 
-    bool matchMultiLineStringLiteralStart(SourceCodeStream* stream);
-    Token readMultiLineStringLiteral(SourceCodeStream* stream, bool moveForward = true);
+    bool matchStringLiteralStart();
+    Token readStringLiteral();
+
+    bool matchMultiLineStringLiteralStart();
+    Token readMultiLineStringLiteral(bool moveForward = true);
 
     const QChar* m_text;
     int m_length;

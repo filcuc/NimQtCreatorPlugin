@@ -26,11 +26,10 @@ private:
     static const QSet<QChar>& electricCharacters();
     static constexpr int tabSize() { return 2; }
 
-    bool startsBlock(const QString &line, NimLexer& lexer) const;
-    bool endsBlock(const QString& line, NimLexer& lexer) const;
+    bool startsBlock(const QString &line, int state) const;
+    bool endsBlock(const QString& line, int state) const;
 
-    int calculateIndentDiff(const QString& previousLine,
-                            NimLexer& lexer) const;
+    int calculateIndentDiff(const QString& previousLine, int state) const;
 };
 
 } // namespace NimEditor

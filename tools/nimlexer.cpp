@@ -121,22 +121,24 @@ NimLexer::Token NimLexer::onDefaultState()
 {
     while (!m_stream->isEnd())
     {
-        if (isSkipChar(m_stream)) {
+        if (isSkipChar()) {
             m_stream->move();
             continue;
         }
-        if (isOperator(m_stream))
-            return readOperator(m_stream);
-        if (matchDocumentationStart(m_stream))
-            return readDocumentation(m_stream);
-        if (matchCommentStart(m_stream))
-            return readComment(m_stream);
-        if (matchMultiLineStringLiteralStart(m_stream))
-            return readMultiLineStringLiteral(m_stream, true);
-        if (matchStringLiteralStart(m_stream))
-            return readStringLiteral(m_stream);
-        if (matchIdentifierOrKeywordStart(m_stream))
-            return readIdentifierOrKeyword(m_stream);
+        if (isOperator())
+            return readOperator();
+        if (matchDocumentationStart())
+            return readDocumentation();
+        if (matchCommentStart())
+            return readComment();
+        if (matchNumber())
+            return readNumber();
+        if (matchMultiLineStringLiteralStart())
+            return readMultiLineStringLiteral(true);
+        if (matchStringLiteralStart())
+            return readStringLiteral();
+        if (matchIdentifierOrKeywordStart())
+            return readIdentifierOrKeyword();
         m_stream->move();
     }
 
@@ -147,65 +149,84 @@ NimLexer::Token NimLexer::onMultiLineStringState()
 {
     if (m_stream->isEnd())
         return Token {0,0, TokenType::EndOfText };
-    return readMultiLineStringLiteral(m_stream, false);
+    return readMultiLineStringLiteral(false);
 }
 
-bool NimLexer::isSkipChar(SourceCodeStream* stream)
+bool NimLexer::isSkipChar()
 {
     static QSet<QChar> skipChars = ::asCharSet({' ', '\t'});
-    return skipChars.contains(stream->peek());
+    return skipChars.contains(m_stream->peek());
 }
 
-bool NimLexer::isOperator(SourceCodeStream* stream)
+bool NimLexer::isOperator()
 {
     static QSet<QChar> operators = ::asCharSet({'+', '-', '*', '/',
                                                 '\\', '<', '>', '!',
                                                 '?', '^', '.', '|',
                                                 '=', '%', '&', '$',
                                                 '@', '~', ':' });
-    return operators.contains(stream->peek());
+    return operators.contains(m_stream->peek());
 }
 
-NimLexer::Token NimLexer::readOperator(SourceCodeStream* stream)
+NimLexer::Token NimLexer::readOperator()
 {
-    stream->setAnchor();
-    stream->move();
-    return Token(stream->anchor(), stream->length(), TokenType::Operator);
+    m_stream->setAnchor();
+    m_stream->move();
+    return Token(m_stream->anchor(), m_stream->length(), TokenType::Operator);
 }
 
-bool NimLexer::matchCommentStart(SourceCodeStream* stream)
+bool NimLexer::matchCommentStart()
 {
-    return stream->peek() == QLatin1Char('#')
-            && stream->peek(1) != QLatin1Char('#');
+    return m_stream->peek() == QLatin1Char('#')
+            && m_stream->peek(1) != QLatin1Char('#');
 }
 
-NimLexer::Token NimLexer::readComment(SourceCodeStream* stream)
+NimLexer::Token NimLexer::readComment()
 {
-    stream->setAnchor();
-    stream->moveToEnd();
-    return Token(stream->anchor(), stream->length(), TokenType::Comment);
+    m_stream->setAnchor();
+    m_stream->moveToEnd();
+    return Token(m_stream->anchor(), m_stream->length(), TokenType::Comment);
 }
 
-bool NimLexer::matchDocumentationStart(SourceCodeStream* stream)
+bool NimLexer::matchDocumentationStart()
 {
-    return stream->peek() == QLatin1Char('#')
-            && stream->peek(1) == QLatin1Char('#');
+    return m_stream->peek() == QLatin1Char('#')
+            && m_stream->peek(1) == QLatin1Char('#');
 }
 
-NimLexer::Token NimLexer::readDocumentation(SourceCodeStream* stream)
+NimLexer::Token NimLexer::readDocumentation()
 {
-    stream->setAnchor();
-    stream->moveToEnd();
-    return Token(stream->anchor(), stream->length(), TokenType::Documentation);
+    m_stream->setAnchor();
+    m_stream->moveToEnd();
+    return Token(m_stream->anchor(), m_stream->length(), TokenType::Documentation);
 }
 
-bool NimLexer::matchIdentifierOrKeywordStart(SourceCodeStream* stream)
+bool NimLexer::matchNumber()
+{
+    return m_stream->peek().isNumber();
+}
+
+NimLexer::Token NimLexer::readNumber()
+{
+    m_stream->setAnchor();
+    m_stream->move();
+
+    while (!m_stream->isEnd()) {
+        if (!m_stream->peek().isNumber())
+            break;
+        m_stream->move();
+    }
+
+    return Token(m_stream->anchor(), m_stream->length(), TokenType::Number);
+}
+
+bool NimLexer::matchIdentifierOrKeywordStart()
 {
     static QRegularExpression isLetter {QLatin1String("[a-zA-Z\x80-\xFF]")};
-    return isLetter.match(stream->peek()).hasMatch();
+    return isLetter.match(m_stream->peek()).hasMatch();
 }
 
-NimLexer::Token NimLexer::readIdentifierOrKeyword(SourceCodeStream* stream)
+NimLexer::Token NimLexer::readIdentifierOrKeyword()
 {
     static QRegularExpression isLetter {QLatin1String("[a-zA-Z\x80-\xFF]")};
     static QSet<QString> keywords =
@@ -230,85 +251,85 @@ NimLexer::Token NimLexer::readIdentifierOrKeyword(SourceCodeStream* stream)
                            "when", "while", "with", "without",
                            "xor",
                            "yield"});
-    stream->setAnchor();
-    stream->move();
+    m_stream->setAnchor();
+    m_stream->move();
 
-    while (!stream->isEnd()) {
-        const QChar& c = stream->peek();
+    while (!m_stream->isEnd()) {
+        const QChar& c = m_stream->peek();
         if (!(c == QLatin1Char('_')
               || c.isDigit()
               || isLetter.match(c).hasMatch()))
             break;
-        stream->move();
+        m_stream->move();
     }
 
-    QString value = stream->value();
+    QString value = m_stream->value();
     bool isKeyword = keywords.contains(value);
 
-    return Token (stream->anchor(),
-                  stream->length(),
+    return Token (m_stream->anchor(),
+                  m_stream->length(),
                   isKeyword ? TokenType::Keyword : TokenType::Identifier );
 }
 
-bool NimLexer::matchStringLiteralStart(SourceCodeStream* stream)
+bool NimLexer::matchStringLiteralStart()
 {
-    return stream->peek() == QLatin1Char('"');
+    return m_stream->peek() == QLatin1Char('"');
 }
 
-NimLexer::Token NimLexer::readStringLiteral(SourceCodeStream* stream)
+NimLexer::Token NimLexer::readStringLiteral()
 {
-    stream->setAnchor();
-    stream->move();
+    m_stream->setAnchor();
+    m_stream->move();
 
-    while (!stream->isEnd()) {
-        if (stream->peek() != QLatin1Char('\\')
-                && stream->peek(1) == QLatin1Char('"')) {
-            stream->move();
-            stream->move();
+    while (!m_stream->isEnd()) {
+        if (m_stream->peek() != QLatin1Char('\\')
+                && m_stream->peek(1) == QLatin1Char('"')) {
+            m_stream->move();
+            m_stream->move();
             break;
         }
-        stream->move();
+        m_stream->move();
     }
 
-    return Token (stream->anchor(),
-                  stream->length(),
+    return Token (m_stream->anchor(),
+                  m_stream->length(),
                   TokenType::StringLiteral);
 }
 
-bool NimLexer::matchMultiLineStringLiteralStart(SourceCodeStream* stream)
+bool NimLexer::matchMultiLineStringLiteralStart()
 {
-    return stream->peek() == QLatin1Char('"')
-            && stream->peek(1) == QLatin1Char('"')
-            && stream->peek(2) == QLatin1Char('"');
+    return m_stream->peek() == QLatin1Char('"')
+            && m_stream->peek(1) == QLatin1Char('"')
+            && m_stream->peek(2) == QLatin1Char('"');
 }
 
-NimLexer::Token NimLexer::readMultiLineStringLiteral(SourceCodeStream* stream, bool moveForward)
+NimLexer::Token NimLexer::readMultiLineStringLiteral(bool moveForward)
 {
     m_state = State::MultiLineString;
-    stream->setAnchor();
+    m_stream->setAnchor();
 
     // Move ahead of 3 chars
     if (moveForward) {
-        stream->move();
-        stream->move();
-        stream->move();
+        m_stream->move();
+        m_stream->move();
+        m_stream->move();
     }
 
-    while (!stream->isEnd()) {
-        if (stream->peek() == QLatin1Char('"')
-                && stream->peek(1) == QLatin1Char('"')
-                && stream->peek(2) == QLatin1Char('"')) {
-            stream->move();
-            stream->move();
-            stream->move();
+    while (!m_stream->isEnd()) {
+        if (m_stream->peek() == QLatin1Char('"')
+                && m_stream->peek(1) == QLatin1Char('"')
+                && m_stream->peek(2) == QLatin1Char('"')) {
+            m_stream->move();
+            m_stream->move();
+            m_stream->move();
             m_state = State::Default;
             break;
         }
-        stream->move();
+        m_stream->move();
     }
 
-    return Token (stream->anchor(),
-                  stream->length(),
+    return Token (m_stream->anchor(),
+                  m_stream->length(),
                   TokenType::MultiLineStringLiteral);
 }
 

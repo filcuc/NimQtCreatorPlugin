@@ -48,6 +48,7 @@ NimHighlighter::Category NimHighlighter::categoryForToken(const NimLexer::Token&
     case NimLexer::TokenType::StringLiteral: return StringCategory;
     case NimLexer::TokenType::MultiLineStringLiteral: return StringCategory;
     case NimLexer::TokenType::Operator: return OperatorCategory;
+    case NimLexer::TokenType::Number: return NumberCategory;
     default: return TextCategory;
     }
 }
@@ -58,28 +59,30 @@ NimHighlighter::Category NimHighlighter::categoryForIdentifier(const NimLexer::T
     Q_ASSERT(token.type == NimLexer::TokenType::Identifier);
 
     static QSet<QString> nimBuiltInValues {
-        QStringLiteral("true"),
-        QStringLiteral("false")
+        QLatin1String("true"),
+        QLatin1String("false")
     };
 
     static QSet<QString> nimBuiltInFunctions {
-        QStringLiteral("echo"),
-        QStringLiteral("isMainModule"),
+        QLatin1String("echo"),
+        QLatin1String("isMainModule"),
     };
 
     static QSet<QString> nimBuiltInTypes {
-        QStringLiteral("bool"),
-        QStringLiteral("cbool"),
-        QStringLiteral("string"),
-        QStringLiteral("cstring"),
-        QStringLiteral("int"),
-        QStringLiteral("cint"),
-        QStringLiteral("long"),
-        QStringLiteral("clong"),
-        QStringLiteral("double"),
-        QStringLiteral("cdouble"),
-        QStringLiteral("table"),
-        QStringLiteral("RootObj")
+        QLatin1String("bool"),
+        QLatin1String("cbool"),
+        QLatin1String("string"),
+        QLatin1String("cstring"),
+        QLatin1String("int"),
+        QLatin1String("cint"),
+        QLatin1String("uint"),
+        QLatin1String("cuint"),
+        QLatin1String("long"),
+        QLatin1String("clong"),
+        QLatin1String("double"),
+        QLatin1String("cdouble"),
+        QLatin1String("table"),
+        QLatin1String("RootObj")
     };
 
     if (nimBuiltInFunctions.contains(tokenValue))
