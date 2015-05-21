@@ -4,7 +4,8 @@
 
 class SourceCodeStream;
 
-/// Nim lexer
+namespace NimEditor {
+
 class NimLexer final
 {
 public:
@@ -27,7 +28,12 @@ public:
     };
 
     struct Token {
-        Token() {}
+        Token()
+            : begin(0)
+            , length(0)
+            , type(TokenType::EndOfText)
+        {}
+
         Token(int b, int l, TokenType::Type t)
             : begin(b), length(l), type(t)
         {}
@@ -79,3 +85,5 @@ private:
     State m_state;
     SourceCodeStream* m_stream;
 };
+
+} // NimEditor

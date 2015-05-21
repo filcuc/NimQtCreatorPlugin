@@ -18,17 +18,6 @@ bool NimIndenter::isElectricCharacter(const QChar& ch) const
     return NimIndenter::electricCharacters().contains(ch);
 }
 
-/**
- * @brief Indents one block (i.e. one line) of code
- * @param doc Unused
- * @param block Block that represents line
- * @param typedChar Unused
- * @param tabSettings An IDE tabulation settings
- *
- * Usually this function called once when you begin new line of code by pressing
- * Enter. If Indenter reimplements indent() function, than indentBlock() may be
- * called in other cases.
- */
 void NimIndenter::indentBlock(QTextDocument *document,
                                  const QTextBlock &block,
                                  const QChar &typedChar,
@@ -36,21 +25,24 @@ void NimIndenter::indentBlock(QTextDocument *document,
 {
     Q_UNUSED(document);
     Q_UNUSED(typedChar);
+
     QTextBlock previousBlock = block.previous();
-    if (previousBlock.isValid()) {
-        QString previousLine = previousBlock.text();
-        int indentation = settings.indentationColumn(previousLine);
 
-        if (isElectricLine(previousLine))
-            indentation += NimIndenter::tabSize();
-        else
-            indentation = qMax<int>(0, indentation + getIndentDiff(previousLine));
-
-        settings.indentLine(block, indentation);
-    } else {
-        // First line in whole document
+    if (!previousBlock.isValid()) {
         settings.indentLine(block, 0);
+        return;
     }
+
+    // Calculate indentation
+    QString previousLine = previousBlock.text();
+    NimLexer lexer(previousLine.constData(),
+                   previousLine.length(),
+                   static_cast<NimLexer::State>(previousBlock.userState()));
+    int indentation = settings.indentationColumn(previousLine);
+    indentation += calculateIndentDiff(previousLine, lexer);
+
+    // Sets indentation
+    settings.indentLine(block, std::max(0, indentation));
 }
 
 const QSet<QString>& NimIndenter::jumpKeywords()
@@ -72,32 +64,66 @@ const QSet<QChar>&NimIndenter::electricCharacters()
     return result;
 }
 
-/// @return True if electric character is last non-space character at given string
-bool NimIndenter::isElectricLine(const QString &line) const
+bool NimIndenter::startsBlock(const QString& line,
+                              NimLexer& lexer) const
 {
-    if (line.isEmpty())
-        return false;
+    NimLexer::Token previous;
+    NimLexer::Token current = lexer.next();
+    while (current.type != NimLexer::TokenType::EndOfText) {
+        previous = current;
+        current = lexer.next();
+    }
 
-    // trim spaces in 'if True:  '
-    int index = line.length() - 1;
-    while ((index > 0) && line[index].isSpace())
-        --index;
+    if (previous.type == NimLexer::TokenType::Operator) {
+        auto ref = line.midRef(previous.begin, previous.length);
+        return ref == QStringLiteral(":") || ref == QStringLiteral("=");
+    }
 
-    return isElectricCharacter(line[index]);
+    if (previous.type == NimLexer::TokenType::Keyword) {
+        auto ref = line.midRef(previous.begin, previous.length);
+        return ref == QLatin1String("type")
+                || ref == QLatin1String("var")
+                || ref == QLatin1String("let")
+                || ref == QLatin1String("enum")
+                || ref == QLatin1String("object");
+    }
+
+    return false;
 }
 
-/// @return negative indent diff if previous line breaks control flow branch
-int NimIndenter::getIndentDiff(const QString &previousLine) const
+bool NimIndenter::endsBlock(const QString& line,
+                            NimLexer& lexer) const
 {
-//    Internal::NimScanner sc(previousLine.constData(), previousLine.length());
-//    forever {
-//        Internal::FormatToken tk = sc.read();
-//        if ((tk.format() == Internal::Format_Keyword) && NimIndenter::jumpKeywords().contains(sc.value(tk)))
-//            return -NimIndenter::tabSize();
-//        if (tk.format() != Internal::Format_Whitespace)
-//            break;
-//    }
-//    return 0;
+    NimLexer::Token previous;
+    NimLexer::Token current = lexer.next();
+    while (current.type != NimLexer::TokenType::EndOfText) {
+        previous = current;
+        current = lexer.next();
+    }
+
+    if (previous.type == NimLexer::TokenType::Keyword) {
+        auto ref = line.midRef(previous.begin, previous.length);
+        return ref == QLatin1String("return")
+               || ref == QLatin1String("break")
+               || ref == QLatin1String("continue");
+    }
+
+    return false;
+}
+
+int NimIndenter::calculateIndentDiff(const QString &previousLine,
+                                     NimLexer& lexer) const
+{
+    if (previousLine.isEmpty())
+        return 0;
+
+    if (startsBlock(previousLine, lexer))
+        return NimIndenter::tabSize();
+
+    if (endsBlock(previousLine, lexer))
+        return -NimIndenter::tabSize();
+
+    return 0;
 }
 
 } // namespace NimEditor

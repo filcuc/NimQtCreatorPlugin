@@ -92,6 +92,8 @@ private:
     int m_markedPosition;
 };
 
+namespace NimEditor {
+
 NimLexer::NimLexer(const QChar* text, int length, State state)
     : m_text(text)
     , m_length(length)
@@ -309,3 +311,5 @@ NimLexer::Token NimLexer::readMultiLineStringLiteral(SourceCodeStream* stream, b
                   stream->length(),
                   TokenType::MultiLineStringLiteral);
 }
+
+} // NimEditor

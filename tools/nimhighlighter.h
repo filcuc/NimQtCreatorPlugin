@@ -4,9 +4,6 @@
 #include "nimlexer.h"
 
 namespace NimEditor {
-namespace Internal {
-
-class NimScanner;
 
 class NimHighlighter : public TextEditor::SyntaxHighlighter
 {
@@ -37,5 +34,4 @@ private:
     int highlightLine(const QString &text, int initialState);
 };
 
-} // namespace Internal
 } // namespace NimEditor
