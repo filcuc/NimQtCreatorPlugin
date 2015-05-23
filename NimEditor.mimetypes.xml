@@ -1,7 +1,15 @@
 <?xml version="1.0"?>
 <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+
+    <mime-type type="text/x-nimeditor-project">
+        <sub-class-of type="text/plain"/>
+        <comment>Nim project file</comment>
+        <glob pattern="*.nimproject"/>
+    </mime-type>
+
     <mime-type type="text/x-nim">
-        <comment>Nim source file without console</comment>
+        <sub-class-of type="text/plain"/>
+        <comment>Nim source file </comment>
         <glob pattern="*.nim"/>
     </mime-type>
 </mime-info>

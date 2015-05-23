@@ -2,6 +2,8 @@
 #include "nimeditor.h"
 #include "nimeditorconstants.h"
 #include "tools/nimhighlighter.h"
+#include "project/nimprojectmanager.h"
+#include "project/nimprojectwizard.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/coreconstants.h>
@@ -39,6 +41,8 @@ bool NimEditorPlugin::initialize(const QStringList &arguments, QString *errorMes
     Utils::MimeDatabase::addMimeTypes(QLatin1String(":/nimeditor/NimEditor.mimetypes.xml"));
 
     addAutoReleasedObject(new NimEditorFactory);
+    addAutoReleasedObject(new NimProjectManager);
+    addAutoReleasedObject(new ProjectWizard);
 
     // Initialize editor actions handler
     // Add MIME overlay icons (these icons displayed at Project dock panel)
