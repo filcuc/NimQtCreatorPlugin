@@ -8,6 +8,8 @@ QTC_PLUGIN_NAME = Nim
 QTC_PLUGIN_DEPENDS = coreplugin texteditor projectexplorer
 include($$QTC_SOURCE/src/qtcreatorplugin.pri)
 
+USE_USER_DESTDIR = yes
+
 DEFINES += \
     NIMEDITOR_LIBRARY
 
@@ -29,3 +31,6 @@ SOURCES += \
     tools/nimhighlighter.cpp \
     tools/nimindenter.cpp \
     tools/nimlexer.cpp
+
+
+OTHER_FILES += README.md
