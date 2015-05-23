@@ -1,11 +1,11 @@
 #pragma once
 
 #include <texteditor/syntaxhighlighter.h>
-#include "nimlexer.h"
+#include "tools/nimlexer.h"
 
-namespace NimEditor {
+namespace NimPlugin {
 
-class NimHighlighter : public TextEditor::SyntaxHighlighter
+class NimHighlighter Q_DECL_FINAL : public TextEditor::SyntaxHighlighter
 {
     enum Category {
         TextCategory = 0,
@@ -23,7 +23,7 @@ public:
     NimHighlighter();
 
 protected:
-    void highlightBlock(const QString &text);
+    void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
 
 private:
     void initTextFormats();

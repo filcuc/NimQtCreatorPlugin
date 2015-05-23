@@ -1,5 +1,9 @@
-# QtCreator NimEditor plugin
-A QtCreator plugin for editing Nim files
+# Nim QtCreator plugin
+A QtCreator plugin for editing Nim programming language files.
+At the moment the plugin offers:
+* Basic syntax highlighting
+* Basic automatic indentation
+* Basic project manager
 
 # Build Instructions and install
 * Grab the QtCreator source code and build it
@@ -12,9 +16,4 @@ A QtCreator plugin for editing Nim files
 * qmake ../path/to/nimeditor/source_dir
 * make
 * make install
-
-By default the plugin should be installed in your local QtCreator plugin dir.
-In particular:
-* on windows, "%LOCALAPPDATA%\QtProject\qtcreator"
-* on linux, "$XDG_DATA_HOME/data/QtProject/qtcreator" or "~/.local/share/data/QtProject/qtcreator"
-* on Mac, "~/Library/Application Support/QtProject/Qt Creator"
+* copy the plugin in your QtCreator plugin dir

@@ -1,8 +1,8 @@
-#include "nimeditor.h"
-#include "nimeditorconstants.h"
-#include "nimeditorplugin.h"
-#include "tools/nimindenter.h"
-#include "tools/nimhighlighter.h"
+#include "nimpluginconstants.h"
+#include "nimplugin.h"
+#include "editor/nimeditor.h"
+#include "editor/nimindenter.h"
+#include "editor/nimhighlighter.h"
 
 #include <texteditor/texteditoractionhandler.h>
 #include <texteditor/texteditorconstants.h>
@@ -12,7 +12,7 @@
 
 using namespace TextEditor;
 
-namespace NimEditor {
+namespace NimPlugin {
 
 NimEditorFactory::NimEditorFactory()
 {
@@ -21,8 +21,8 @@ NimEditorFactory::NimEditorFactory()
     addMimeType(QLatin1String(Constants::C_NIM_MIMETYPE));
 
     setEditorActionHandlers(TextEditorActionHandler::Format
-                       | TextEditorActionHandler::UnCommentSelection
-                       | TextEditorActionHandler::UnCollapseAll);
+                            | TextEditorActionHandler::UnCommentSelection
+                            | TextEditorActionHandler::UnCollapseAll);
 
     setDocumentCreator([]() { return new TextDocument(Constants::C_NIMEDITOR_ID); });
     setIndenterCreator([]() { return new NimIndenter; });

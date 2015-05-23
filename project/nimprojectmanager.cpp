@@ -1,12 +1,11 @@
-#include "nimprojectmanager.h"
-#include "../nimeditorconstants.h"
-#include "nimproject.h"
+#include "nimpluginconstants.h"
+#include "project/nimprojectmanager.h"
+#include "project/nimproject.h"
 
-namespace NimEditor {
+namespace NimPlugin {
 
 NimProjectManager::NimProjectManager()
-{
-}
+{}
 
 QString NimProjectManager::mimeType() const
 {

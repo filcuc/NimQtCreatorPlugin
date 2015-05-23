@@ -1,6 +1,6 @@
-#include "nimproject.h"
-#include "nimprojectnode.h"
-#include "nimprojectmanager.h"
+#include "project/nimproject.h"
+#include "project/nimprojectnode.h"
+#include "project/nimprojectmanager.h"
 
 #include <QDebug>
 #include <QFileInfo>
@@ -8,7 +8,7 @@
 
 #include <texteditor/textdocument.h>
 
-namespace NimEditor {
+namespace NimPlugin {
 
 const int MIN_TIME_BETWEEN_PROJECT_SCANS = 4500;
 

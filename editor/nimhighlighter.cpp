@@ -1,11 +1,10 @@
-#include "nimhighlighter.h"
-#include "nimlexer.h"
+#include "editor/nimhighlighter.h"
+#include "tools/nimlexer.h"
 
 #include <texteditor/textdocument.h>
 #include <texteditor/texteditorconstants.h>
 
-
-namespace NimEditor {
+namespace NimPlugin {
 
 NimHighlighter::NimHighlighter() {
     initTextFormats();

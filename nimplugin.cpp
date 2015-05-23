@@ -1,7 +1,7 @@
-#include "nimeditorplugin.h"
-#include "nimeditor.h"
-#include "nimeditorconstants.h"
-#include "tools/nimhighlighter.h"
+#include "nimplugin.h"
+#include "nimpluginconstants.h"
+#include "editor/nimeditor.h"
+#include "editor/nimhighlighter.h"
 #include "project/nimprojectmanager.h"
 #include "project/nimprojectwizard.h"
 
@@ -15,38 +15,37 @@
 #include <utils/mimetypes/mimedatabase.h>
 
 #include <QtPlugin>
-#include <QCoreApplication>
 
-using namespace NimEditor::Constants;
+using namespace NimPlugin::Constants;
 
-namespace NimEditor {
+namespace NimPlugin {
 
-static NimEditorPlugin *m_instance = 0;
+static NimPlugin *m_instance = 0;
 
-NimEditorPlugin::NimEditorPlugin()
+NimPlugin::NimPlugin()
 {
     m_instance = this;
 }
 
-NimEditorPlugin::~NimEditorPlugin()
+NimPlugin::~NimPlugin()
 {
     m_instance = 0;
 }
 
-bool NimEditorPlugin::initialize(const QStringList &arguments, QString *errorMessage)
+bool NimPlugin::initialize(const QStringList &arguments, QString *errorMessage)
 {
     Q_UNUSED(arguments)
     Q_UNUSED(errorMessage)
 
-    Utils::MimeDatabase::addMimeTypes(QLatin1String(":/nimeditor/NimEditor.mimetypes.xml"));
+    Utils::MimeDatabase::addMimeTypes(QLatin1String(":/NimPlugin.mimetypes.xml"));
 
     addAutoReleasedObject(new NimEditorFactory);
     addAutoReleasedObject(new NimProjectManager);
-    addAutoReleasedObject(new ProjectWizard);
+    addAutoReleasedObject(new NimProjectWizard);
 
     // Initialize editor actions handler
     // Add MIME overlay icons (these icons displayed at Project dock panel)
-    const QIcon icon = QIcon::fromTheme(QLatin1String(C_NIM_MIME_ICON));
+    const QIcon icon (QLatin1String(Constants::C_NIM_ICON_PATH));
     if (!icon.isNull())
         Core::FileIconProvider::registerIconOverlayForMimeType(icon, C_NIM_MIMETYPE);
 

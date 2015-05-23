@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>NimPlugin.mimetypes.xml</file>
+        <file>nim.png</file>
+    </qresource>
+</RCC>

@@ -2,9 +2,9 @@
 
 #include <QString>
 
-class SourceCodeStream;
+namespace NimPlugin {
 
-namespace NimEditor {
+class SourceCodeStream;
 
 class NimLexer final
 {

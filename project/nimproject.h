@@ -9,12 +9,12 @@
 
 namespace TextEditor { class TextDocument; }
 
-namespace NimEditor {
+namespace NimPlugin {
 
 class NimProjectManager;
 class ProjectNode;
 
-class NimProject : public ProjectExplorer::Project
+class NimProject Q_DECL_FINAL : public ProjectExplorer::Project
 {
     Q_OBJECT
 
@@ -25,7 +25,6 @@ public:
     Core::IDocument *document() const Q_DECL_OVERRIDE;
     ProjectExplorer::IProjectManager *projectManager() const Q_DECL_OVERRIDE;
     ProjectExplorer::ProjectNode *rootProjectNode() const Q_DECL_OVERRIDE;
-
     QStringList files(FilesMode) const Q_DECL_OVERRIDE;
 
 private slots:

@@ -2,9 +2,9 @@
 
 #include <texteditor/texteditor.h>
 
-namespace NimEditor {
+namespace NimPlugin {
 
-class NimEditorFactory : public TextEditor::TextEditorFactory
+class NimEditorFactory Q_DECL_FINAL : public TextEditor::TextEditorFactory
 {
     Q_OBJECT
 

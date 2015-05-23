@@ -1,25 +1,26 @@
 #pragma once
 
 #include <texteditor/indenter.h>
-#include <QStringList>
 
-namespace NimEditor {
+namespace NimPlugin {
 
 class NimLexer;
 
-class NimIndenter : public TextEditor::Indenter
+/// This class indent handle the indentation in the editor
+class NimIndenter Q_DECL_FINAL : public TextEditor::Indenter
 {
 public:
+    /// Constructor
     NimIndenter();
 
     virtual ~NimIndenter();
 
-    bool isElectricCharacter(const QChar &ch) const override;
+    bool isElectricCharacter(const QChar &ch) const Q_DECL_OVERRIDE;
 
     void indentBlock(QTextDocument *document,
                      const QTextBlock &block,
                      const QChar &typedChar,
-                     const TextEditor::TabSettings &settings) override;
+                     const TextEditor::TabSettings &settings) Q_DECL_OVERRIDE;
 
 private:
     static const QSet<QString>& jumpKeywords();

@@ -1,11 +1,11 @@
-#include "nimindenter.h"
-#include "nimlexer.h"
+#include "editor/nimindenter.h"
+#include "tools/nimlexer.h"
 
 #include <texteditor/tabsettings.h>
 
 #include <QSet>
 
-namespace NimEditor {
+namespace NimPlugin {
 
 NimIndenter::NimIndenter()
 {}

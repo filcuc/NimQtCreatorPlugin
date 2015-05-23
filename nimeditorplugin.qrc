@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/nimeditor">
-        <file>NimEditor.mimetypes.xml</file>
-        <file>nim.png</file>
-    </qresource>
-</RCC>

@@ -1,0 +1,12 @@
+{
+    \"Name\" : \"NimPlugin\",
+    \"Version\" : \"$$QTCREATOR_VERSION\",
+    \"CompatVersion\" : \"$$QTCREATOR_COMPAT_VERSION\",
+    \"Vendor\" : \"LightWolf.eu\",
+    \"Copyright\" : \"(C) 2015 Filippo Cucchetto\",
+    \"License\" : \"MIT\",
+    \"Category\" : \"Other Languages\",
+    \"Description\" : \"Editor and file creation wizards for Nim.\",
+    \"Url\" : \"https://github.com/filcuc/QtCreatorNimEditor\",
+    $$dependencyList
+}
