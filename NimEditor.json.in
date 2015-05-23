@@ -14,6 +14,6 @@
     ],
     \"Category\" : \"Other Languages\",
     \"Description\" : \"Editor and file creation wizards for Nim.\",
-    \"Url\" : \"http://www.qt.io\",
+    \"Url\" : \"https://github.com/filcuc/QtCreatorNimEditor\",
     $$dependencyList
 }

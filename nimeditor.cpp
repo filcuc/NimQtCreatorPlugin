@@ -13,7 +13,6 @@
 using namespace TextEditor;
 
 namespace NimEditor {
-namespace Internal {
 
 NimEditorFactory::NimEditorFactory()
 {
@@ -34,5 +33,4 @@ NimEditorFactory::NimEditorFactory()
     setCodeFoldingSupported(true);
 }
 
-} // namespace Internal
 } // namespace NimEditor

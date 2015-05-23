@@ -18,7 +18,6 @@
 using namespace NimEditor::Constants;
 
 namespace NimEditor {
-namespace Internal {
 
 static NimEditorPlugin *m_instance = 0;
 
@@ -50,5 +49,4 @@ bool NimEditorPlugin::initialize(const QStringList &arguments, QString *errorMes
     return true;
 }
 
-} // namespace Internal
 } // namespace NimEditor

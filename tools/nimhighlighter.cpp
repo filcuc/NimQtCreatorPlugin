@@ -56,6 +56,7 @@ NimHighlighter::Category NimHighlighter::categoryForToken(const NimLexer::Token&
 NimHighlighter::Category NimHighlighter::categoryForIdentifier(const NimLexer::Token& token,
                                                                const QString& tokenValue)
 {
+    Q_UNUSED(token)
     Q_ASSERT(token.type == NimLexer::TokenType::Identifier);
 
     static QSet<QString> nimBuiltInValues {

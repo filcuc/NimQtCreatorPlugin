@@ -1,10 +1,8 @@
 #pragma once
 
 #include <extensionsystem/iplugin.h>
-#include <QSet>
 
 namespace NimEditor {
-namespace Internal {
 
 class NimEditorPlugin : public ExtensionSystem::IPlugin
 {
@@ -19,5 +17,4 @@ public:
     virtual void extensionsInitialized() {}
 };
 
-} // namespace Internal
 } // namespace NimEditor

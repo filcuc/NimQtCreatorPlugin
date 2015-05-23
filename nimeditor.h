@@ -3,7 +3,6 @@
 #include <texteditor/texteditor.h>
 
 namespace NimEditor {
-namespace Internal {
 
 class NimEditorFactory : public TextEditor::TextEditorFactory
 {
@@ -13,5 +12,4 @@ public:
     NimEditorFactory();
 };
 
-} // namespace Internal
 } // namespace NimEditor
