@@ -18,7 +18,7 @@ NimProject::NimProject(NimProjectManager *projectManager, const QString &fileNam
 {
     m_document->setFilePath(Utils::FileName::fromString(fileName));
     m_projectDir = QFileInfo(fileName).dir();
-    m_rootNode = new ProjectNode(Utils::FileName::fromString(m_projectDir.dirName()));
+    m_rootNode = new NimProjectNode(Utils::FileName::fromString(m_projectDir.dirName()));
 
     m_projectScanTimer.setSingleShot(true);
     connect(&m_projectScanTimer, SIGNAL(timeout()), this, SLOT(populateProject()));
@@ -27,7 +27,6 @@ NimProject::NimProject(NimProjectManager *projectManager, const QString &fileNam
 
     connect(&m_fsWatcher, &QFileSystemWatcher::directoryChanged, this, &NimProject::scheduleProjectScan);
 }
-
 
 QString NimProject::displayName() const
 {
@@ -112,8 +111,8 @@ void NimProject::addNodes(const QSet<QString> &nodes)
         path = m_projectDir.relativeFilePath(node).split(QDir::separator());
         path.pop_back();
         FolderNode *folder = findFolderFor(path);
-        folder->addFileNodes(QList<FileNode*>() << new FileNode(Utils::FileName::fromString(node),
-                                                                SourceType, false));
+        auto fileNode = new FileNode(Utils::FileName::fromString(node), SourceType, false);
+        folder->addFileNodes({fileNode});
     }
 }
 
@@ -127,9 +126,9 @@ void NimProject::removeNodes(const QSet<QString> &nodes)
         path.pop_back();
         FolderNode *folder = findFolderFor(path);
 
-        for (FileNode *file : folder->fileNodes()) {
-            if (file->path().toString() == node) {
-                folder->removeFileNodes(QList<FileNode*>() << file);
+        for (FileNode *fileNode : folder->fileNodes()) {
+            if (fileNode->path().toString() == node) {
+                folder->removeFileNodes({fileNode});
                 break;
             }
         }
@@ -151,8 +150,8 @@ ProjectExplorer::FolderNode *NimProject::findFolderFor(const QStringList &path)
             }
         }
         if (!folderFound) {
-            FolderNode *newFolder = new FolderNode(Utils::FileName::fromString(part));
-            folder->addFolderNodes(QList<FolderNode*>() << newFolder);
+            auto newFolder = new FolderNode(Utils::FileName::fromString(part));
+            folder->addFolderNodes({newFolder});
             folder = newFolder;
         }
     }

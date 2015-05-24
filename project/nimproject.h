@@ -12,7 +12,7 @@ namespace TextEditor { class TextDocument; }
 namespace NimPlugin {
 
 class NimProjectManager;
-class ProjectNode;
+class NimProjectNode;
 
 class NimProject Q_DECL_FINAL : public ProjectExplorer::Project
 {
@@ -40,7 +40,7 @@ private:
 
     NimProjectManager *m_projectManager;
     TextEditor::TextDocument *m_document;
-    ProjectNode *m_rootNode;
+    NimProjectNode *m_rootNode;
 
     QDir m_projectDir;
     QSet<QString> m_files;

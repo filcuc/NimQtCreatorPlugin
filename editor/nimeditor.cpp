@@ -29,7 +29,7 @@ NimEditorFactory::NimEditorFactory()
     setSyntaxHighlighterCreator([]() { return new NimHighlighter; });
     setCommentStyle(Utils::CommentDefinition::HashStyle);
     setParenthesesMatchingEnabled(true);
-    setMarksVisible(true);
+    setMarksVisible(false);
     setCodeFoldingSupported(true);
 }
 

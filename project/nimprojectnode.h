@@ -6,22 +6,21 @@ namespace Utils { class FileName; }
 
 namespace NimPlugin {
 
-class ProjectNode Q_DECL_FINAL : public ProjectExplorer::ProjectNode
+class NimProject;
+
+class NimProjectNode Q_DECL_FINAL : public ProjectExplorer::ProjectNode
 {
 public:
-    ProjectNode(const Utils::FileName &projectFilePath)
-        : ProjectExplorer::ProjectNode(projectFilePath)
-    {}
+    NimProjectNode(const Utils::FileName &projectFilePath);
 
-    QList<ProjectExplorer::ProjectAction> supportedActions(Node *) const Q_DECL_OVERRIDE { return QList<ProjectExplorer::ProjectAction>(); }
-
-    bool canAddSubProject(const QString &) const Q_DECL_OVERRIDE { return false; }
-    bool addSubProjects(const QStringList &) Q_DECL_OVERRIDE { return false; }
-    bool removeSubProjects(const QStringList &) Q_DECL_OVERRIDE { return false; }
-    bool addFiles(const QStringList &, QStringList*) Q_DECL_OVERRIDE { return false; }
-    bool removeFiles(const QStringList &, QStringList*) Q_DECL_OVERRIDE { return false; }
-    bool deleteFiles(const QStringList &) Q_DECL_OVERRIDE { return false; }
-    bool renameFile(const QString &, const QString &) Q_DECL_OVERRIDE { return false; }
+    QList<ProjectExplorer::ProjectAction> supportedActions(Node *node) const Q_DECL_OVERRIDE;
+    bool canAddSubProject(const QString &) const Q_DECL_OVERRIDE;
+    bool addSubProjects(const QStringList &) Q_DECL_OVERRIDE;
+    bool removeSubProjects(const QStringList &) Q_DECL_OVERRIDE;
+    bool addFiles(const QStringList &, QStringList*) Q_DECL_OVERRIDE;
+    bool removeFiles(const QStringList &, QStringList*) Q_DECL_OVERRIDE;
+    bool deleteFiles(const QStringList &) Q_DECL_OVERRIDE;
+    bool renameFile(const QString &, const QString &) Q_DECL_OVERRIDE;
 };
 
 }
