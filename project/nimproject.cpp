@@ -138,22 +138,24 @@ void NimProject::removeNodes(const QSet<QString> &nodes)
 ProjectExplorer::FolderNode *NimProject::findFolderFor(const QStringList &path)
 {
     using namespace ProjectExplorer;
+
     FolderNode *folder = m_rootNode;
 
     for (const QString& part : path) {
-        bool folderFound = false;
-        foreach (FolderNode *subFolder, folder->subFolderNodes()) {
-            if (subFolder->displayName() == part) {
-                folder = subFolder;
-                folderFound = true;
-                break;
-            }
+        auto subFolderNodes = folder->subFolderNodes();
+
+        auto it = std::find_if(subFolderNodes.begin(),
+                               subFolderNodes.end(),
+                               [&part] (const FolderNode* f) { return f->displayName() == part; });
+
+        if (it != subFolderNodes.end()) {
+            folder = *it;
+            continue;
         }
-        if (!folderFound) {
-            auto newFolder = new FolderNode(Utils::FileName::fromString(part));
-            folder->addFolderNodes({newFolder});
-            folder = newFolder;
-        }
+
+        auto newFolder = new FolderNode(Utils::FileName::fromString(part));
+        folder->addFolderNodes({newFolder});
+        folder = newFolder;
     }
     return folder;
 }
