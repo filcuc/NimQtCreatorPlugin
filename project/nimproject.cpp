@@ -141,9 +141,16 @@ ProjectExplorer::FolderNode *NimProject::findFolderFor(const QStringList &path)
 
     FolderNode *folder = m_rootNode;
 
-    for (const QString& part : path) {
-        auto subFolderNodes = folder->subFolderNodes();
+    QString currentPath = m_projectDir.absolutePath();
 
+    for (const QString& part : path) {
+        // Create relative path
+        if (!currentPath.isEmpty())
+            currentPath += QDir::separator();
+        currentPath += part;
+
+        // Find the child with the given name
+        auto subFolderNodes = folder->subFolderNodes();
         auto it = std::find_if(subFolderNodes.begin(),
                                subFolderNodes.end(),
                                [&part] (const FolderNode* f) { return f->displayName() == part; });
@@ -153,7 +160,11 @@ ProjectExplorer::FolderNode *NimProject::findFolderFor(const QStringList &path)
             continue;
         }
 
-        auto newFolder = new FolderNode(Utils::FileName::fromString(part));
+        // Folder not found. Add it
+        auto newFolderPath = QDir::cleanPath(currentPath + QDir::separator() + part);
+        auto newFolder = new FolderNode(Utils::FileName::fromString(newFolderPath),
+                                        ProjectExplorer::FolderNodeType,
+                                        part);
         folder->addFolderNodes({newFolder});
         folder = newFolder;
     }

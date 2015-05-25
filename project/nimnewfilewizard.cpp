@@ -4,6 +4,7 @@
 #include <coreplugin/basefilewizard.h>
 #include <projectexplorer/customwizard/customwizard.h>
 #include <projectexplorer/projectexplorerconstants.h>
+#include <projectexplorer/projectnodes.h>
 #include <utils/filewizardpage.h>
 #include <QDebug>
 #include <QDir>
@@ -22,13 +23,20 @@ NimNewFileWizard::NimNewFileWizard()
 }
 
 Core::BaseFileWizard *NimNewFileWizard::create(QWidget *parent,
-                                                     const Core::WizardDialogParameters &parameters) const
+                                               const Core::WizardDialogParameters &parameters) const
 {
     auto result = new Core::BaseFileWizard(parent);
     result->setWindowTitle(displayName());
 
+    QString wizardPath = parameters.defaultPath();
+    QVariant value = parameters.extraValues().value(QLatin1String(ProjectExplorer::Constants::PREFERRED_PROJECT_NODE));
+    if (value.isValid()) {
+        if (auto node = value.value<ProjectExplorer::Node*>())
+            wizardPath = node->path().toFileInfo().absolutePath();
+    }
+
     auto page = new Utils::FileWizardPage;
-    page->setPath(parameters.defaultPath());
+    page->setPath(wizardPath);
     result->addPage(page);
 
     foreach (QWizardPage *p, parameters.extensionPages())
@@ -41,11 +49,13 @@ Core::GeneratedFiles NimNewFileWizard::generateFiles(const QWizard *widget, QStr
 {
     const auto wizard = qobject_cast<const Core::BaseFileWizard *>(widget);
     const auto page = wizard->find<Utils::FileWizardPage>();
-    const QString projectPath = page->path();
-    const QDir dir(projectPath);
-    const QString projectName = page->fileName();
+    const QString filePath = page->path();
+    const QDir dir(filePath);
+    QString fileName = page->fileName();
+    if (!fileName.endsWith(QLatin1String(".nim")))
+        fileName += QLatin1String(".nim");
 
-    Core::GeneratedFile projectFile(QFileInfo(dir, projectName + QLatin1String(".nim")).absoluteFilePath());
+    Core::GeneratedFile projectFile(QFileInfo(dir, fileName).absoluteFilePath());
     projectFile.setContents(QLatin1String("if isMainModule():\n  discard()"));
     projectFile.setAttributes(Core::GeneratedFile::OpenEditorAttribute);
 
