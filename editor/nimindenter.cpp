@@ -1,5 +1,6 @@
 #include "editor/nimindenter.h"
 #include "tools/nimlexer.h"
+#include <texteditor/icodestylepreferences.h>
 
 #include <texteditor/tabsettings.h>
 
@@ -8,7 +9,8 @@
 namespace NimPlugin {
 
 NimIndenter::NimIndenter()
-{}
+{
+}
 
 NimIndenter::~NimIndenter()
 {}
@@ -19,9 +21,9 @@ bool NimIndenter::isElectricCharacter(const QChar& ch) const
 }
 
 void NimIndenter::indentBlock(QTextDocument *document,
-                                 const QTextBlock &block,
-                                 const QChar &typedChar,
-                                 const TextEditor::TabSettings &settings)
+                              const QTextBlock &block,
+                              const QChar &typedChar,
+                              const TextEditor::TabSettings &settings)
 {
     Q_UNUSED(document);
     Q_UNUSED(typedChar);
@@ -89,8 +91,8 @@ bool NimIndenter::endsBlock(const QString& line, int state) const
     if (previous.type == NimLexer::TokenType::Keyword) {
         auto ref = line.midRef(previous.begin, previous.length);
         return ref == QLatin1String("return")
-               || ref == QLatin1String("break")
-               || ref == QLatin1String("continue");
+                || ref == QLatin1String("break")
+                || ref == QLatin1String("continue");
     }
 
     return false;

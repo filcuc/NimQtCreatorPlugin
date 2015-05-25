@@ -3,7 +3,9 @@
 #include "editor/nimeditor.h"
 #include "editor/nimhighlighter.h"
 #include "project/nimprojectmanager.h"
-#include "project/nimprojectwizard.h"
+#include "project/nimimportprojectwizard.h"
+#include "project/nimnewprojectwizard.h"
+#include "project/nimnewfilewizard.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/coreconstants.h>
@@ -41,7 +43,9 @@ bool NimPlugin::initialize(const QStringList &arguments, QString *errorMessage)
 
     addAutoReleasedObject(new NimEditorFactory);
     addAutoReleasedObject(new NimProjectManager);
-    addAutoReleasedObject(new NimProjectWizard);
+    addAutoReleasedObject(new NimImportProjectWizard);
+    addAutoReleasedObject(new NimNewProjectWizard);
+    addAutoReleasedObject(new NimNewFileWizard);
 
     // Initialize editor actions handler
     // Add MIME overlay icons (these icons displayed at Project dock panel)

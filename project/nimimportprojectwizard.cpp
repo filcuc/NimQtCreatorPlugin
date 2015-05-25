@@ -1,4 +1,4 @@
-#include "project/nimprojectwizard.h"
+#include "project/nimimportprojectwizard.h"
 #include "nimpluginconstants.h"
 
 #include <coreplugin/basefilewizard.h>
@@ -10,7 +10,7 @@
 
 namespace NimPlugin {
 
-NimProjectWizard::NimProjectWizard()
+NimImportProjectWizard::NimImportProjectWizard()
 {
     setWizardKind(Core::IWizardFactory::ProjectWizard);
     setDisplayName(tr("Import Existing Nim Project"));
@@ -21,25 +21,26 @@ NimProjectWizard::NimProjectWizard()
     setIcon(QIcon(QLatin1String(Constants::C_NIM_ICON_PATH)));
 }
 
-Core::BaseFileWizard *NimProjectWizard::create(QWidget *parent, const Core::WizardDialogParameters &parameters) const
+Core::BaseFileWizard *NimImportProjectWizard::create(QWidget *parent,
+                                                     const Core::WizardDialogParameters &parameters) const
 {
-    Core::BaseFileWizard *wizard = new Core::BaseFileWizard(parent);
-    wizard->setWindowTitle(displayName());
+    auto result = new Core::BaseFileWizard(parent);
+    result->setWindowTitle(displayName());
 
-    Utils::FileWizardPage *page = new Utils::FileWizardPage;
+    auto page = new Utils::FileWizardPage;
     page->setPath(parameters.defaultPath());
-    wizard->addPage(page);
+    result->addPage(page);
 
     foreach (QWizardPage *p, parameters.extensionPages())
-        wizard->addPage(p);
+        result->addPage(p);
 
-    return wizard;
+    return result;
 }
 
-Core::GeneratedFiles NimProjectWizard::generateFiles(const QWizard *widget, QString *) const
+Core::GeneratedFiles NimImportProjectWizard::generateFiles(const QWizard *widget, QString *) const
 {
-    const Core::BaseFileWizard *wizard = qobject_cast<const Core::BaseFileWizard *>(widget);
-    Utils::FileWizardPage *page = wizard->find<Utils::FileWizardPage>();
+    const auto wizard = qobject_cast<const Core::BaseFileWizard *>(widget);
+    const auto page = wizard->find<Utils::FileWizardPage>();
     const QString projectPath = page->path();
     const QDir dir(projectPath);
     const QString projectName = page->fileName();
@@ -48,10 +49,10 @@ Core::GeneratedFiles NimProjectWizard::generateFiles(const QWizard *widget, QStr
     projectFile.setContents(QLatin1String("# Nim project\n"));
     projectFile.setAttributes(Core::GeneratedFile::OpenProjectAttribute);
 
-    return Core::GeneratedFiles() << projectFile;
+    return {projectFile};
 }
 
-bool NimProjectWizard::postGenerateFiles(const QWizard*, const Core::GeneratedFiles &files, QString *errorMessage)
+bool NimImportProjectWizard::postGenerateFiles(const QWizard*, const Core::GeneratedFiles &files, QString *errorMessage)
 {
     return ProjectExplorer::CustomProjectWizard::postGenerateOpen(files, errorMessage);
 }

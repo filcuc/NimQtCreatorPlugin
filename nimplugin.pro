@@ -32,7 +32,9 @@ HEADERS += \
     project/nimproject.h \
     project/nimprojectmanager.h \
     project/nimprojectnode.h \
-    project/nimprojectwizard.h
+    project/nimimportprojectwizard.h \
+    project/nimnewprojectwizard.h \
+    project/nimnewfilewizard.h
 
 SOURCES += \
     nimplugin.cpp \
@@ -42,7 +44,9 @@ SOURCES += \
     tools/nimlexer.cpp \
     project/nimproject.cpp \
     project/nimprojectmanager.cpp \
-    project/nimprojectwizard.cpp \
-    project/nimprojectnode.cpp
+    project/nimprojectnode.cpp \
+    project/nimimportprojectwizard.cpp \
+    project/nimnewprojectwizard.cpp \
+    project/nimnewfilewizard.cpp
 
 OTHER_FILES += README.md

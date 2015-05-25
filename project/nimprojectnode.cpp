@@ -10,7 +10,8 @@ NimProjectNode::NimProjectNode(const Utils::FileName &projectFilePath)
 QList<ProjectExplorer::ProjectAction> NimProjectNode::supportedActions(Node *node) const
 {
     using namespace ProjectExplorer;
-    static const QList<ProjectAction> fileActions = { ProjectAction::Rename };
+    static const QList<ProjectAction> fileActions = { ProjectAction::Rename
+                                                    , ProjectAction::RemoveFile };
     static const QList<ProjectAction> folderActions = { ProjectAction::AddNewFile
                                                       , ProjectAction::RemoveFile };
     switch (node->nodeType())
