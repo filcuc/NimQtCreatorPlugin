@@ -29,7 +29,7 @@ Core::BaseFileWizard *NimNewFileWizard::create(QWidget *parent,
     result->setWindowTitle(displayName());
 
     QString wizardPath = parameters.defaultPath();
-    QVariant value = parameters.extraValues().value(QLatin1String(ProjectExplorer::Constants::PREFERRED_PROJECT_NODE));
+    const QVariant value = parameters.extraValues().value(QLatin1String(ProjectExplorer::Constants::PREFERRED_PROJECT_NODE));
     if (value.isValid()) {
         if (auto node = value.value<ProjectExplorer::Node*>())
             wizardPath = node->path().toFileInfo().absolutePath();

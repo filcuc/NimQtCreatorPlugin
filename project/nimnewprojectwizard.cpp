@@ -14,7 +14,7 @@ NimNewProjectWizard::NimNewProjectWizard()
 {
     setWizardKind(Core::IWizardFactory::ProjectWizard);
     setDisplayName(tr("Create a new Nim Project"));
-    setId(QStringLiteral("Z.NimC"));
+    setId(QStringLiteral("Z.Nim"));
     setDescription(tr("Creates a new Nim project."));
     setCategory(QLatin1String(ProjectExplorer::Constants::QT_PROJECT_WIZARD_CATEGORY));
     setDisplayCategory(QLatin1String(ProjectExplorer::Constants::QT_PROJECT_WIZARD_CATEGORY_DISPLAY));
