@@ -34,7 +34,10 @@ HEADERS += \
     project/nimprojectnode.h \
     project/nimimportprojectwizard.h \
     project/nimnewprojectwizard.h \
-    project/nimnewfilewizard.h
+    project/nimnewfilewizard.h \
+    project/nimbuildconfiguration.h \
+    project/nimbuildconfigurationfactory.h \
+    project/nimbuildinfo.h
 
 SOURCES += \
     nimplugin.cpp \
@@ -47,6 +50,9 @@ SOURCES += \
     project/nimprojectnode.cpp \
     project/nimimportprojectwizard.cpp \
     project/nimnewprojectwizard.cpp \
-    project/nimnewfilewizard.cpp
+    project/nimnewfilewizard.cpp \
+    project/nimbuildconfiguration.cpp \
+    project/nimbuildconfigurationfactory.cpp \
+    project/nimbuildinfo.cpp
 
 OTHER_FILES += README.md

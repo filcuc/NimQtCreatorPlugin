@@ -26,6 +26,10 @@ public:
     ProjectExplorer::IProjectManager *projectManager() const Q_DECL_OVERRIDE;
     ProjectExplorer::ProjectNode *rootProjectNode() const Q_DECL_OVERRIDE;
     QStringList files(FilesMode) const Q_DECL_OVERRIDE;
+    bool needsConfiguration() const Q_DECL_OVERRIDE;
+
+    Utils::FileName path() const;
+    bool supportsKit(ProjectExplorer::Kit *k, QString *errorMessage) const Q_DECL_OVERRIDE;
 
 private slots:
     void scheduleProjectScan();
@@ -35,6 +39,7 @@ private:
     void recursiveScanDirectory(const QDir &dir, QSet<QString> &container);
     void addNodes(const QSet<QString> &nodes);
     void removeNodes(const QSet<QString> &nodes);
+    void initTarget();
 
     ProjectExplorer::FolderNode *findFolderFor(const QStringList &path);
 

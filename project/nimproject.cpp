@@ -1,12 +1,17 @@
 #include "project/nimproject.h"
 #include "project/nimprojectnode.h"
 #include "project/nimprojectmanager.h"
+#include "project/nimbuildconfiguration.h"
 
 #include <QDebug>
 #include <QFileInfo>
 #include <QThread>
 
 #include <texteditor/textdocument.h>
+#include <projectexplorer/target.h>
+#include <projectexplorer/kit.h>
+#include <projectexplorer/buildconfiguration.h>
+#include <projectexplorer/projectexplorerconstants.h>
 
 namespace NimPlugin {
 
@@ -52,6 +57,16 @@ ProjectExplorer::ProjectNode *NimProject::rootProjectNode() const
 QStringList NimProject::files(FilesMode) const
 {
     return QStringList(m_files.toList());
+}
+
+bool NimProject::needsConfiguration() const
+{
+    return true;
+}
+
+Utils::FileName NimProject::path() const
+{
+    return Utils::FileName::fromString(m_projectDir.absolutePath());
 }
 
 void NimProject::scheduleProjectScan()
@@ -170,6 +185,13 @@ ProjectExplorer::FolderNode *NimProject::findFolderFor(const QStringList &path)
         folder = newFolder;
     }
     return folder;
+}
+
+bool NimProject::supportsKit(ProjectExplorer::Kit *k, QString *) const
+{
+    if (!k->isValid())
+        return false;
+    return true;
 }
 
 }
