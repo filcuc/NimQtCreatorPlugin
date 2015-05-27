@@ -18,7 +18,8 @@ NimProject::NimProject(NimProjectManager *projectManager, const QString &fileNam
 {
     m_document->setFilePath(Utils::FileName::fromString(fileName));
     m_projectDir = QFileInfo(fileName).dir();
-    m_rootNode = new NimProjectNode(Utils::FileName::fromString(m_projectDir.dirName()));
+    m_rootNode = new NimProjectNode(Utils::FileName::fromString(m_projectDir.absolutePath()));
+    m_rootNode->setDisplayName(m_projectDir.dirName());
 
     m_projectScanTimer.setSingleShot(true);
     connect(&m_projectScanTimer, SIGNAL(timeout()), this, SLOT(populateProject()));

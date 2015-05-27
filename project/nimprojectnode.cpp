@@ -19,6 +19,7 @@ QList<ProjectExplorer::ProjectAction> NimProjectNode::supportedActions(Node *nod
     case FileNodeType:
         return fileActions;
     case FolderNodeType:
+    case ProjectNodeType:
         return folderActions;
     default:
         return ProjectExplorer::ProjectNode::supportedActions(node);

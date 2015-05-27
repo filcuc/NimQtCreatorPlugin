@@ -28,15 +28,8 @@ Core::BaseFileWizard *NimNewFileWizard::create(QWidget *parent,
     auto result = new Core::BaseFileWizard(parent);
     result->setWindowTitle(displayName());
 
-    QString wizardPath = parameters.defaultPath();
-    const QVariant value = parameters.extraValues().value(QLatin1String(ProjectExplorer::Constants::PREFERRED_PROJECT_NODE));
-    if (value.isValid()) {
-        if (auto node = value.value<ProjectExplorer::Node*>())
-            wizardPath = node->path().toFileInfo().absolutePath();
-    }
-
     auto page = new Utils::FileWizardPage;
-    page->setPath(wizardPath);
+    page->setPath(parameters.defaultPath());
     result->addPage(page);
 
     foreach (QWizardPage *p, parameters.extensionPages())
