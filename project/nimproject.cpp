@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QThread>
+#include <QQueue>
 
 #include <texteditor/textdocument.h>
 #include <projectexplorer/target.h>
@@ -61,7 +62,7 @@ QStringList NimProject::files(FilesMode) const
 
 bool NimProject::needsConfiguration() const
 {
-    return true;
+    return targets().empty();
 }
 
 Utils::FileName NimProject::path() const
@@ -189,9 +190,28 @@ ProjectExplorer::FolderNode *NimProject::findFolderFor(const QStringList &path)
 
 bool NimProject::supportsKit(ProjectExplorer::Kit *k, QString *) const
 {
-    if (!k->isValid())
-        return false;
-    return true;
+    return k->isValid();
+}
+
+Utils::FileNameList NimProject::nimFiles() const
+{
+    using namespace ProjectExplorer;
+
+    Utils::FileNameList result;
+
+    QQueue<FolderNode*> folders;
+    folders.enqueue(m_rootNode);
+
+    while (!folders.isEmpty()) {
+        FolderNode* folder = folders.takeFirst();
+        for (FileNode* file : folder->fileNodes()) {
+            if (file->displayName().endsWith(QLatin1String(".nim")))
+                result.append(file->path());
+        }
+        folders.append(folder->subFolderNodes());
+    }
+
+    return result;
 }
 
 }

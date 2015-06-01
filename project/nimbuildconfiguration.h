@@ -16,10 +16,13 @@ public:
     NimBuildConfiguration(ProjectExplorer::Target *target);
 
 public:
-    virtual ProjectExplorer::NamedWidget *createConfigWidget();
-    virtual ProjectExplorer::BuildConfiguration::BuildType buildType() const;
+    ProjectExplorer::NamedWidget *createConfigWidget() Q_DECL_OVERRIDE;
+    ProjectExplorer::BuildConfiguration::BuildType buildType() const Q_DECL_OVERRIDE;
     void setBuildType(ProjectExplorer::BuildConfiguration::BuildType buildType);
     void setBuildDirectory(const Utils::FileName &dir) Q_DECL_OVERRIDE;
+    bool fromMap(const QVariantMap &map) Q_DECL_OVERRIDE;
+    QVariantMap toMap() const Q_DECL_OVERRIDE;
+    static bool canRestore(const QVariantMap &map);
 
 private:
     ProjectExplorer::BuildConfiguration::BuildType m_buildType;

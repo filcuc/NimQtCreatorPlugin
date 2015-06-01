@@ -37,7 +37,9 @@ HEADERS += \
     project/nimnewfilewizard.h \
     project/nimbuildconfiguration.h \
     project/nimbuildconfigurationfactory.h \
-    project/nimbuildinfo.h
+    project/nimbuildinfo.h \
+    project/nimcompilerbuildstep.h \
+    project/nimcompilerbuildstepconfigwidget.h
 
 SOURCES += \
     nimplugin.cpp \
@@ -53,6 +55,11 @@ SOURCES += \
     project/nimnewfilewizard.cpp \
     project/nimbuildconfiguration.cpp \
     project/nimbuildconfigurationfactory.cpp \
-    project/nimbuildinfo.cpp
+    project/nimbuildinfo.cpp \
+    project/nimcompilerbuildstep.cpp \
+    project/nimcompilerbuildstepconfigwidget.cpp
 
 OTHER_FILES += README.md
+
+FORMS += \
+    project/nimcompilerbuildstepconfigwidget.ui
