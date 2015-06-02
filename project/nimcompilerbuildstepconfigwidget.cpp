@@ -20,12 +20,12 @@ NimCompilerBuildStepConfigWidget::NimCompilerBuildStepConfigWidget(NimCompilerBu
 
 QString NimCompilerBuildStepConfigWidget::summaryText() const
 {
-    return QLatin1String("Nim Compiler build step");
+    return QStringLiteral("Nim build step");
 }
 
 QString NimCompilerBuildStepConfigWidget::displayName() const
 {
-    return QLatin1String("Nim Compiler");
+    return QStringLiteral("Nim build step");
 }
 
 void NimCompilerBuildStepConfigWidget::connectUISignals()

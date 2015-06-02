@@ -39,7 +39,9 @@ HEADERS += \
     project/nimbuildconfigurationfactory.h \
     project/nimbuildinfo.h \
     project/nimcompilerbuildstep.h \
-    project/nimcompilerbuildstepconfigwidget.h
+    project/nimcompilerbuildstepconfigwidget.h \
+    project/nimcompilercleanstep.h \
+    project/nimcompilercleanstepconfigwidget.h
 
 SOURCES += \
     nimplugin.cpp \
@@ -57,9 +59,12 @@ SOURCES += \
     project/nimbuildconfigurationfactory.cpp \
     project/nimbuildinfo.cpp \
     project/nimcompilerbuildstep.cpp \
-    project/nimcompilerbuildstepconfigwidget.cpp
+    project/nimcompilerbuildstepconfigwidget.cpp \
+    project/nimcompilercleanstep.cpp \
+    project/nimcompilercleanstepconfigwidget.cpp
 
 OTHER_FILES += README.md
 
 FORMS += \
-    project/nimcompilerbuildstepconfigwidget.ui
+    project/nimcompilerbuildstepconfigwidget.ui \
+    project/nimcompilercleanstepconfigwidget.ui

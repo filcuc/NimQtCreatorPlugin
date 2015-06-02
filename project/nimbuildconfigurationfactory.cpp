@@ -3,6 +3,7 @@
 #include "nimbuildinfo.h"
 #include "nimproject.h"
 #include "nimcompilerbuildstep.h"
+#include "nimcompilercleanstep.h"
 
 #include <utils/qtcassert.h>
 #include <projectexplorer/buildinfo.h>
@@ -70,8 +71,11 @@ ProjectExplorer::BuildConfiguration *NimBuildConfigurationFactory::create(Projec
 
     // Add nim compiler build step
     BuildStepList* buildSteps = result->stepList(Core::Id(Constants::BUILDSTEPS_BUILD));
-    auto nimCompilerStep = new NimCompilerBuildStep(buildSteps);
-    buildSteps->appendStep(nimCompilerStep);
+    buildSteps->appendStep(new NimCompilerBuildStep(buildSteps));
+
+    // Add clean step
+    BuildStepList* cleanSteps = result->stepList(Core::Id(Constants::BUILDSTEPS_CLEAN));
+    cleanSteps->appendStep(new NimCompilerCleanStep(cleanSteps));
 
     return result;
 }
@@ -99,8 +103,11 @@ ProjectExplorer::BuildConfiguration *NimBuildConfigurationFactory::restore(Proje
 
     // Add nim compiler build step
     BuildStepList* buildSteps = result->stepList(Core::Id(Constants::BUILDSTEPS_BUILD));
-    auto nimCompilerStep = new NimCompilerBuildStep(buildSteps);
-    buildSteps->appendStep(nimCompilerStep);
+    buildSteps->appendStep(new NimCompilerBuildStep(buildSteps));
+
+    // Add clean step
+    BuildStepList* cleanSteps = result->stepList(Core::Id(Constants::BUILDSTEPS_CLEAN));
+    cleanSteps->appendStep(new NimCompilerCleanStep(cleanSteps));
 
     return result;
 }
