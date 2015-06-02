@@ -4,6 +4,8 @@
 
 namespace NimPlugin {
 
+class NimBuildInfo;
+
 class NimBuildConfigurationFactory Q_DECL_FINAL : public ProjectExplorer::IBuildConfigurationFactory
 {
     Q_OBJECT
@@ -38,6 +40,14 @@ public:
     int priority(const ProjectExplorer::Kit *k, const QString &projectPath) const Q_DECL_OVERRIDE;
 
     int priority(const ProjectExplorer::Target *parent) const Q_DECL_OVERRIDE;
+
+private:
+    static Utils::FileName defaultBuildDirectory(const QString &projectPath,
+                                         ProjectExplorer::BuildConfiguration::BuildType type);
+    static QString buildTypeToString(ProjectExplorer::BuildConfiguration::BuildType type);
+    NimBuildInfo* createBuildInfo(Core::Id kitId,
+                                  const QString &projectPath,
+                                  ProjectExplorer::BuildConfiguration::BuildType buildType) const;
 };
 
 }

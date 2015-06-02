@@ -2,6 +2,8 @@
 #include "nimcompilerbuildstep.h"
 #include "ui_nimcompilerbuildstepconfigwidget.h"
 #include "nimproject.h"
+#include "nimcompilerbuildstep.h"
+#include "nimbuildconfiguration.h"
 
 namespace NimPlugin {
 
@@ -11,7 +13,7 @@ NimCompilerBuildStepConfigWidget::NimCompilerBuildStepConfigWidget(NimCompilerBu
     , m_ui(new Ui::NimCompilerBuildStepConfigWidget())
 {
     m_ui->setupUi(this);
-    connectBuildStepSignals();
+    connectBuildConfigurationSignals();
     connectUISignals();
     updateUI();
 }
@@ -42,15 +44,23 @@ void NimCompilerBuildStepConfigWidget::updateBuildDirectory()
 void NimCompilerBuildStepConfigWidget::onTargetChanged(int index)
 {
     Q_UNUSED(index);
+
+    auto bc = dynamic_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
+    Q_ASSERT(bc);
+
     auto data = m_ui->targetComboBox->currentData();
     Utils::FileName path = Utils::FileName::fromString(data.toString());
-    m_buildStep->setTarget(path);
+    bc->setTargetNimFile(path);
 }
 
-void NimCompilerBuildStepConfigWidget::connectBuildStepSignals()
+void NimCompilerBuildStepConfigWidget::connectBuildConfigurationSignals()
 {
-    connect(m_buildStep, SIGNAL(targetChanged(Utils::FileName)), this, SLOT(updateUI()));
-    connect(m_buildStep, SIGNAL(additionalArgumentsChanged(QString)), this, SLOT(updateUI()));
+    auto bc = dynamic_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
+    Q_ASSERT(bc);
+
+    connect(bc, SIGNAL(targetNimFileChanged(Utils::FileName)), this, SLOT(updateUI()));
+    connect(bc, SIGNAL(userCompilerOptionsChanged(QStringList)), this, SLOT(updateUI()));
+    connect(bc, SIGNAL(buildDirectoryChanged()), this, SLOT(updateUI()));
 }
 
 void NimCompilerBuildStepConfigWidget::updateUI()
@@ -62,7 +72,9 @@ void NimCompilerBuildStepConfigWidget::updateUI()
 
 void NimCompilerBuildStepConfigWidget::onAdditionalArgumentsTextEdited(const QString &text)
 {
-    m_buildStep->setAdditionalArguments(text);
+    auto bc = dynamic_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
+    Q_ASSERT(bc);
+    bc->setUserCompilerOptions(text.split(QChar::Space));
 }
 
 void NimCompilerBuildStepConfigWidget::updateCommandLineText()

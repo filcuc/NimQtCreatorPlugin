@@ -15,24 +15,19 @@ public:
 
     ProjectExplorer::BuildStepConfigWidget *createConfigWidget() Q_DECL_OVERRIDE;
 
-    Utils::FileName target() const;
-    void setTarget(const Utils::FileName &target);
-
-    QString additionalArguments() const;
-    void setAdditionalArguments(const QString& additionalArguments);
-
-signals:
-    void additionalArgumentsChanged(const QString& args);
-    void targetChanged(const Utils::FileName &target);
+private Q_SLOTS:
+    void updateProcessParameters();
 
 private:
-    void updateProcessParameters();
+    void connectBuildConfigurationSignals();
+
     void updateCommand();
     void updateWorkingDirectory();
     void updateArguments();
     void updateEnvironment();
 
     Utils::FileName m_target;
+    QString m_mandatoryArguments;
     QString m_additionalArguments;
 };
 

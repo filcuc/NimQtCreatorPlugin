@@ -1,5 +1,6 @@
 #include "nimcompilerbuildstep.h"
 #include "nimcompilerbuildstepconfigwidget.h"
+#include "nimbuildconfiguration.h"
 
 #include <projectexplorer/buildconfiguration.h>
 
@@ -12,6 +13,7 @@ NimCompilerBuildStep::NimCompilerBuildStep(ProjectExplorer::BuildStepList *paren
 {
     setDefaultDisplayName(QLatin1String("Nim Compiler"));
     setDisplayName(QLatin1String("Nim Compiler"));
+    connectBuildConfigurationSignals();
     updateProcessParameters();
 }
 
@@ -20,32 +22,12 @@ ProjectExplorer::BuildStepConfigWidget *NimCompilerBuildStep::createConfigWidget
     return new NimCompilerBuildStepConfigWidget(this);
 }
 
-Utils::FileName NimCompilerBuildStep::target() const
+void NimCompilerBuildStep::connectBuildConfigurationSignals()
 {
-    return m_target;
-}
-
-void NimCompilerBuildStep::setTarget(const Utils::FileName &target)
-{
-    if (target == m_target)
-        return;
-    m_target = target;
-    updateProcessParameters();
-    emit targetChanged(target);
-}
-
-QString NimCompilerBuildStep::additionalArguments() const
-{
-    return m_additionalArguments;
-}
-
-void NimCompilerBuildStep::setAdditionalArguments(const QString &additionalArguments)
-{
-    if (additionalArguments == m_additionalArguments)
-        return;
-    m_additionalArguments = additionalArguments;
-    updateProcessParameters();
-    emit additionalArgumentsChanged(additionalArguments);
+    auto bc = dynamic_cast<NimBuildConfiguration*>(buildConfiguration());
+    connect(bc, SIGNAL(buildDirectoryChanged()), this, SLOT(updateProcessParameters()));
+    connect(bc, SIGNAL(targetNimFileChanged(Utils::FileName)), this, SLOT(updateProcessParameters()));
+    connect(bc, SIGNAL(userCompilerOptionsChanged(QStringList)), this, SLOT(updateProcessParameters()));
 }
 
 void NimCompilerBuildStep::updateProcessParameters()
@@ -58,46 +40,24 @@ void NimCompilerBuildStep::updateProcessParameters()
 
 void NimCompilerBuildStep::updateCommand()
 {
-    processParameters()->setCommand(QLatin1String("nim"));
+    processParameters()->setCommand(QStringLiteral("nim"));
 }
 
 void NimCompilerBuildStep::updateWorkingDirectory()
 {
-    processParameters()->setWorkingDirectory(buildConfiguration()->buildDirectory().toString());
+    auto bc = dynamic_cast<NimBuildConfiguration*>(buildConfiguration());
+    processParameters()->setWorkingDirectory(bc->buildDirectory().toString());
 }
 
 void NimCompilerBuildStep::updateArguments()
 {    
-    using namespace ProjectExplorer;
+    auto bc = dynamic_cast<NimBuildConfiguration*>(buildConfiguration());
 
     QStringList arguments;
-    arguments << QLatin1String("c");
-
-    switch (buildConfiguration()->buildType())
-    {
-    case BuildConfiguration::Release:
-        arguments << QLatin1String("-d:release");
-        break;
-    case BuildConfiguration::Debug:
-        arguments << QLatin1String("--debugInfo");
-        arguments << QLatin1String("--lineDir:on");
-        break;
-    default:
-        break;
-    }
-
-    QString buildDir = buildConfiguration()->buildDirectory().toString();
-
-    QString cacheDir = QLatin1String("--nimCache:") + buildDir;
-    arguments << cacheDir;
-
-    QString outputFile = QLatin1String("--out:") + buildDir
-                       + QDir::separator()
-                       + QFileInfo(m_target.toString()).baseName();
-    arguments << outputFile;
-
-    arguments << m_additionalArguments;
-    arguments << m_target.toString();
+    arguments << QStringLiteral("c");
+    arguments << bc->compilerOptions();
+    arguments << bc->userCompilerOptions();
+    arguments << bc->targetNimFile().toString();
 
     // Remove empty args
     auto predicate = [](const QString& str)->bool{return str.isEmpty();};
@@ -109,7 +69,8 @@ void NimCompilerBuildStep::updateArguments()
 
 void NimCompilerBuildStep::updateEnvironment()
 {
-    processParameters()->setEnvironment(buildConfiguration()->environment());
+    auto bc = dynamic_cast<NimBuildConfiguration*>(buildConfiguration());
+    processParameters()->setEnvironment(bc->environment());
 }
 
 }

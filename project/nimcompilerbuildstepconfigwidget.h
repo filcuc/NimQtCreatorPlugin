@@ -26,7 +26,7 @@ private Q_SLOTS:
     void onTargetChanged(int index);
 
 private:
-    void connectBuildStepSignals();
+    void connectBuildConfigurationSignals();
     void connectUISignals();
 
     void updateBuildDirectory();
