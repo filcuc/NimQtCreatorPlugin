@@ -32,6 +32,7 @@ private:
     void updateBuildDirectory();
     void updateCommandLineText();
     void updateTargetComboBox();
+    void updateAdditionalArgumentsLineEdit();
 
     NimCompilerBuildStep* m_buildStep;
     Ui::NimCompilerBuildStepConfigWidget* m_ui;

@@ -11,8 +11,8 @@ namespace NimPlugin {
 NimCompilerBuildStep::NimCompilerBuildStep(ProjectExplorer::BuildStepList *parentList)
     : ProjectExplorer::AbstractProcessStep(parentList, Core::Id("NimCompilerStep"))
 {
-    setDefaultDisplayName(QLatin1String("Nim Compiler"));
-    setDisplayName(QLatin1String("Nim Compiler"));
+    setDefaultDisplayName(QStringLiteral("Nim Compiler"));
+    setDisplayName(QStringLiteral("Nim Compiler"));
     connectBuildConfigurationSignals();
     updateProcessParameters();
 }

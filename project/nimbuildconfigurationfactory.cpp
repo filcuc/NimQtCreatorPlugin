@@ -59,6 +59,8 @@ ProjectExplorer::BuildConfiguration *NimBuildConfigurationFactory::create(Projec
     Q_ASSERT(project);
 
     auto nimInfo = static_cast<const NimBuildInfo *>(info);
+
+    // Create the build configuration and initialize it from build info
     auto result = new NimBuildConfiguration(parent);
     result->setDisplayName(nimInfo->displayName);
     result->setDefaultDisplayName(nimInfo->displayName);
@@ -84,10 +86,22 @@ bool NimBuildConfigurationFactory::canRestore(const ProjectExplorer::Target *par
 ProjectExplorer::BuildConfiguration *NimBuildConfigurationFactory::restore(ProjectExplorer::Target *parent,
                                                                            const QVariantMap &map)
 {
+    using namespace ProjectExplorer;
+
     Q_ASSERT(canRestore(parent, map));
+
+    // Create the build configuration
     auto result = new NimBuildConfiguration(parent);
+
+    // Restore from map
     auto status = result->fromMap(map);
     Q_ASSERT(status);
+
+    // Add nim compiler build step
+    BuildStepList* buildSteps = result->stepList(Core::Id(Constants::BUILDSTEPS_BUILD));
+    auto nimCompilerStep = new NimCompilerBuildStep(buildSteps);
+    buildSteps->appendStep(nimCompilerStep);
+
     return result;
 }
 

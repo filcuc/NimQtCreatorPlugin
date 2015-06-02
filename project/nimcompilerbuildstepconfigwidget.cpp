@@ -68,6 +68,7 @@ void NimCompilerBuildStepConfigWidget::updateUI()
     updateBuildDirectory();
     updateCommandLineText();
     updateTargetComboBox();
+    updateAdditionalArgumentsLineEdit();
 }
 
 void NimCompilerBuildStepConfigWidget::onAdditionalArgumentsTextEdited(const QString &text)
@@ -115,6 +116,16 @@ void NimCompilerBuildStepConfigWidget::updateTargetComboBox()
         if (index > 0)
             m_ui->targetComboBox->setCurrentIndex(index);
     }
+}
+
+void NimCompilerBuildStepConfigWidget::updateAdditionalArgumentsLineEdit()
+{
+    using namespace ProjectExplorer;
+
+    auto bc = dynamic_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
+    Q_ASSERT(bc);
+
+    m_ui->additionalArgumentsLineEdit->setText(bc->userCompilerOptions().join(QChar::Space));
 }
 
 }
