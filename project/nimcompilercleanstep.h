@@ -7,7 +7,7 @@
 namespace NimPlugin {
 
 /// The nim compiler clean step
-class NimCompilerCleanStep : public ProjectExplorer::AbstractProcessStep
+class NimCompilerCleanStep : public ProjectExplorer::BuildStep
 {
     Q_OBJECT
 
@@ -16,16 +16,16 @@ public:
     NimCompilerCleanStep(ProjectExplorer::BuildStepList* parentList);
 
     /// Return the configuration widget
-    ProjectExplorer::BuildStepConfigWidget *createConfigWidget();
+    ProjectExplorer::BuildStepConfigWidget *createConfigWidget() Q_DECL_OVERRIDE;
 
-private Q_SLOTS:
-    /// Updates the nim compiler process flags.
-    /// It's called when something change in the build configuration
-    void updateProcessParameters();
+    /// Initialize
+    bool init() Q_DECL_OVERRIDE;
+
+    /// Run the clean step
+    void run(QFutureInterface<bool> &fi) Q_DECL_OVERRIDE;
 
 private:
-    /// Connect the build configuration change signals
-    void connectBuildConfigurationSignals();
+    Utils::FileName m_buildDir;
 };
 
 }
