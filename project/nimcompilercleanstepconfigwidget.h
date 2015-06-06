@@ -15,11 +15,20 @@ class NimCompilerCleanStepConfigWidget : public ProjectExplorer::BuildStepConfig
     Q_OBJECT
 
 public:
+    /// Constructor
     NimCompilerCleanStepConfigWidget(NimCompilerCleanStep* cleanStep);
+
+    /// Destructor
+    virtual ~NimCompilerCleanStepConfigWidget();
+
+    /// Return the summary text
     QString summaryText() const Q_DECL_OVERRIDE;
+
+    /// Return the display name
     QString displayName() const Q_DECL_OVERRIDE;
 
 private Q_SLOT:
+    /// Updates the UI
     void updateUI();
 
 private:

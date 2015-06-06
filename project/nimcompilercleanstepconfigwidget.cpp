@@ -16,6 +16,12 @@ NimCompilerCleanStepConfigWidget::NimCompilerCleanStepConfigWidget(NimCompilerCl
     updateUI();
 }
 
+NimCompilerCleanStepConfigWidget::~NimCompilerCleanStepConfigWidget()
+{
+    delete m_ui;
+    m_ui = nullptr;
+}
+
 QString NimCompilerCleanStepConfigWidget::summaryText() const
 {
     return QStringLiteral("Nim clean step");

@@ -14,7 +14,11 @@ class NimCompilerBuildStepConfigWidget : public ProjectExplorer::BuildStepConfig
 {
     Q_OBJECT
 public:
+    /// Constructor
     NimCompilerBuildStepConfigWidget(NimCompilerBuildStep* buildStep);
+
+    /// Destructor
+    virtual ~NimCompilerBuildStepConfigWidget();
 
     QString summaryText() const Q_DECL_OVERRIDE;
     QString displayName() const Q_DECL_OVERRIDE;

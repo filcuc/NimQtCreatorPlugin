@@ -18,6 +18,12 @@ NimCompilerBuildStepConfigWidget::NimCompilerBuildStepConfigWidget(NimCompilerBu
     updateUI();
 }
 
+NimCompilerBuildStepConfigWidget::~NimCompilerBuildStepConfigWidget()
+{
+    delete m_ui;
+    m_ui = nullptr;
+}
+
 QString NimCompilerBuildStepConfigWidget::summaryText() const
 {
     return QStringLiteral("Nim build step");
