@@ -70,7 +70,8 @@ Utils::FileName NimBuildConfiguration::cacheDirectory() const
 
 Utils::FileName NimBuildConfiguration::outFilePath() const
 {
-    return buildDirectory().appendPath(QStringLiteral("outFile"));
+    QString outFile = targetNimFile().toFileInfo().baseName();
+    return buildDirectory().appendPath(outFile);
 }
 
 QStringList NimBuildConfiguration::compilerOptions() const

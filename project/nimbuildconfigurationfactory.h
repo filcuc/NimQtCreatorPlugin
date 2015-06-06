@@ -6,6 +6,7 @@ namespace NimPlugin {
 
 class NimBuildInfo;
 
+/// The nim build configuration factory
 class NimBuildConfigurationFactory Q_DECL_FINAL : public ProjectExplorer::IBuildConfigurationFactory
 {
     Q_OBJECT
