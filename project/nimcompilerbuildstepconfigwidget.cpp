@@ -75,6 +75,7 @@ void NimCompilerBuildStepConfigWidget::updateUI()
     updateCommandLineText();
     updateTargetComboBox();
     updateAdditionalArgumentsLineEdit();
+    updateBuildTypeComboBox();
 }
 
 void NimCompilerBuildStepConfigWidget::onAdditionalArgumentsTextEdited(const QString &text)
@@ -132,6 +133,14 @@ void NimCompilerBuildStepConfigWidget::updateAdditionalArgumentsLineEdit()
     Q_ASSERT(bc);
 
     m_ui->additionalArgumentsLineEdit->setText(bc->userCompilerOptions().join(QChar::Space));
+}
+
+void NimCompilerBuildStepConfigWidget::updateBuildTypeComboBox()
+{
+    using namespace ProjectExplorer;
+    auto bc = dynamic_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
+    Q_ASSERT(bc);
+    m_ui->buildTypeComboBox->setCurrentIndex(bc->buildType() == BuildConfiguration::Debug ? 0 : 1);
 }
 
 }
