@@ -49,7 +49,7 @@ Core::GeneratedFiles NimNewFileWizard::generateFiles(const QWizard *widget, QStr
         fileName += QLatin1String(".nim");
 
     Core::GeneratedFile projectFile(QFileInfo(dir, fileName).absoluteFilePath());
-    projectFile.setContents(QLatin1String("if isMainModule():\n  discard()"));
+    projectFile.setContents(QLatin1String("if isMainModule:\n  discard()"));
     projectFile.setAttributes(Core::GeneratedFile::OpenEditorAttribute);
 
     return {projectFile};
