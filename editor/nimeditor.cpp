@@ -31,6 +31,7 @@ NimEditorFactory::NimEditorFactory()
     setParenthesesMatchingEnabled(true);
     setMarksVisible(false);
     setCodeFoldingSupported(true);
+    setMarksVisible(true);
 }
 
 } // namespace NimEditor

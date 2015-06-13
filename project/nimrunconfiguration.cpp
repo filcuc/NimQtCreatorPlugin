@@ -5,6 +5,8 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QVariantMap>
+// QtCreator
+#include <projectexplorer/localenvironmentaspect.h>
 
 namespace NimPlugin {
 
@@ -12,6 +14,7 @@ NimRunConfiguration::NimRunConfiguration(ProjectExplorer::Target* parent)
     : ProjectExplorer::LocalApplicationRunConfiguration(parent, Core::Id("Nim Run Configuration"))
     , m_runMode(ProjectExplorer::ApplicationLauncher::Gui)
 {
+    addExtraAspect(new ProjectExplorer::LocalEnvironmentAspect(this));
     setDisplayName(QStringLiteral("Nim Run Configuration"));
     setDefaultDisplayName(QStringLiteral("Nim Run Configuration"));
     connectBuildConfigurationSignals();

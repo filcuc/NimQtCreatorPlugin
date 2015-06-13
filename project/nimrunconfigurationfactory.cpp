@@ -3,6 +3,7 @@
 #include "nimrunconfiguration.h"
 
 #include <projectexplorer/target.h>
+#include <debugger/debuggerrunconfigurationaspect.h>
 
 namespace NimPlugin {
 
