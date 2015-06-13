@@ -75,6 +75,9 @@ private Q_SLOTS:
     void updateConfiguration();
 
 private:
+    /// Connects the target signals
+    void connectTargetSignals();
+
     /// Connects the build configuration signals
     void connectBuildConfigurationSignals();
 

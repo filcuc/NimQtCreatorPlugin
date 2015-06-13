@@ -17,6 +17,7 @@ NimRunConfiguration::NimRunConfiguration(ProjectExplorer::Target* parent)
     addExtraAspect(new ProjectExplorer::LocalEnvironmentAspect(this));
     setDisplayName(QStringLiteral("Nim Run Configuration"));
     setDefaultDisplayName(QStringLiteral("Nim Run Configuration"));
+    connectTargetSignals();
     connectBuildConfigurationSignals();
     updateConfiguration();
 }
@@ -132,6 +133,14 @@ void NimRunConfiguration::updateConfiguration()
     QFileInfo outFileInfo = outFile.toFileInfo();
     setExecutable(outFileInfo.absoluteFilePath());
     setWorkingDirectory(outFileInfo.absoluteDir().absolutePath());
+}
+
+void NimRunConfiguration::connectTargetSignals()
+{
+    connect(this->target(),
+            SIGNAL(activeBuildConfigurationChanged(ProjectExplorer::BuildConfiguration*)),
+            this,
+            SLOT(updateConfiguration()));
 }
 
 }
