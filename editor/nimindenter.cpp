@@ -57,7 +57,14 @@ bool NimIndenter::startsBlock(const QString& line, int state) const
     NimLexer::Token previous;
     NimLexer::Token current = lexer.next();
     while (current.type != NimLexer::TokenType::EndOfText) {
-        previous = current;
+        switch (current.type) {
+        case NimLexer::TokenType::Comment:
+        case NimLexer::TokenType::Documentation:
+            break;
+        default:
+            previous = current;
+            break;
+        }
         current = lexer.next();
     }
 
