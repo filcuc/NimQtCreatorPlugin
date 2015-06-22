@@ -34,4 +34,4 @@ private:
     int highlightLine(const QString &text, int initialState);
 };
 
-} // namespace NimEditor
+}

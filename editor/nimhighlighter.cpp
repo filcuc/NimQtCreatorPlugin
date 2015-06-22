@@ -110,4 +110,4 @@ int NimHighlighter::highlightLine(const QString &text, int initialState)
     return lexer.state();
 }
 
-} // namespace NimEditor
+}

@@ -33,4 +33,4 @@ private:
     int calculateIndentDiff(const QString& previousLine, int state) const;
 };
 
-} // namespace NimEditor
+}

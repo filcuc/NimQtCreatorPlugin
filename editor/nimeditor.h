@@ -12,4 +12,4 @@ public:
     NimEditorFactory();
 };
 
-} // namespace NimEditor
+}

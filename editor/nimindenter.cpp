@@ -112,4 +112,4 @@ int NimIndenter::calculateIndentDiff(const QString &previousLine, int state) con
     return 0;
 }
 
-} // namespace NimEditor
+}

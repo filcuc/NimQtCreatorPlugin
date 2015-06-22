@@ -34,4 +34,4 @@ NimEditorFactory::NimEditorFactory()
     setMarksVisible(true);
 }
 
-} // namespace NimEditor
+}
