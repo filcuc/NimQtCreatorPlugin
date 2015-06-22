@@ -3,6 +3,7 @@
 #include "editor/nimeditor.h"
 #include "editor/nimindenter.h"
 #include "editor/nimhighlighter.h"
+#include "editor/nimcompletionassistprovider.h"
 
 #include <texteditor/texteditoractionhandler.h>
 #include <texteditor/texteditorconstants.h>
@@ -29,9 +30,9 @@ NimEditorFactory::NimEditorFactory()
     setSyntaxHighlighterCreator([]() { return new NimHighlighter; });
     setCommentStyle(Utils::CommentDefinition::HashStyle);
     setParenthesesMatchingEnabled(true);
-    setMarksVisible(false);
     setCodeFoldingSupported(true);
     setMarksVisible(true);
+    setCompletionAssistProvider(new NimCompletionAssistProvider());
 }
 
 } // namespace NimEditor

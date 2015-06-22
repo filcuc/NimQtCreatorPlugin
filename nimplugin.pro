@@ -27,6 +27,7 @@ HEADERS += \
     editor/nimeditor.h \
     editor/nimhighlighter.h \
     editor/nimindenter.h \
+    editor/nimcompletionassistprovider.h \
     tools/nimlexer.h \
     tools/sourcecodestream.h \
     project/nimproject.h \
@@ -51,6 +52,7 @@ SOURCES += \
     editor/nimeditor.cpp \
     editor/nimhighlighter.cpp \
     editor/nimindenter.cpp \
+    editor/nimcompletionassistprovider.cpp \
     tools/nimlexer.cpp \
     project/nimproject.cpp \
     project/nimprojectmanager.cpp \
