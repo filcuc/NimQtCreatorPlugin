@@ -30,7 +30,7 @@ QList<ProjectExplorer::BuildInfo *> NimBuildConfigurationFactory::availableBuild
     using namespace ProjectExplorer;
 
     // Retrieve the project path
-    auto nimProject = dynamic_cast<NimProject*>(parent->project());
+    auto nimProject = qobject_cast<NimProject*>(parent->project());
     if (!nimProject)
         return {};
 
@@ -56,7 +56,7 @@ ProjectExplorer::BuildConfiguration *NimBuildConfigurationFactory::create(Projec
 {
     using namespace ProjectExplorer;
 
-    auto project = dynamic_cast<NimProject*>(parent->project());
+    auto project = qobject_cast<NimProject*>(parent->project());
     Q_ASSERT(project);
 
     auto nimInfo = static_cast<const NimBuildInfo *>(info);

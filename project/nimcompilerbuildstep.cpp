@@ -24,7 +24,7 @@ ProjectExplorer::BuildStepConfigWidget *NimCompilerBuildStep::createConfigWidget
 
 void NimCompilerBuildStep::connectBuildConfigurationSignals()
 {
-    auto bc = dynamic_cast<NimBuildConfiguration*>(buildConfiguration());
+    auto bc = qobject_cast<NimBuildConfiguration*>(buildConfiguration());
     connect(bc, SIGNAL(buildDirectoryChanged()), this, SLOT(updateProcessParameters()));
     connect(bc, SIGNAL(targetNimFileChanged(Utils::FileName)), this, SLOT(updateProcessParameters()));
     connect(bc, SIGNAL(userCompilerOptionsChanged(QStringList)), this, SLOT(updateProcessParameters()));
@@ -45,13 +45,13 @@ void NimCompilerBuildStep::updateCommand()
 
 void NimCompilerBuildStep::updateWorkingDirectory()
 {
-    auto bc = dynamic_cast<NimBuildConfiguration*>(buildConfiguration());
+    auto bc = qobject_cast<NimBuildConfiguration*>(buildConfiguration());
     processParameters()->setWorkingDirectory(bc->buildDirectory().toString());
 }
 
 void NimCompilerBuildStep::updateArguments()
 {    
-    auto bc = dynamic_cast<NimBuildConfiguration*>(buildConfiguration());
+    auto bc = qobject_cast<NimBuildConfiguration*>(buildConfiguration());
 
     QStringList arguments;
     arguments << QStringLiteral("c");
@@ -69,7 +69,7 @@ void NimCompilerBuildStep::updateArguments()
 
 void NimCompilerBuildStep::updateEnvironment()
 {
-    auto bc = dynamic_cast<NimBuildConfiguration*>(buildConfiguration());
+    auto bc = qobject_cast<NimBuildConfiguration*>(buildConfiguration());
     processParameters()->setEnvironment(bc->environment());
 }
 

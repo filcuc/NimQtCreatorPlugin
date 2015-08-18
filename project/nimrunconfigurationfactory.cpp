@@ -14,9 +14,10 @@ NimRunConfigurationFactory::NimRunConfigurationFactory()
 QList<Core::Id> NimRunConfigurationFactory::availableCreationIds(ProjectExplorer::Target *parent,
                                                                  ProjectExplorer::IRunConfigurationFactory::CreationMode mode) const
 {
-    Q_UNUSED(parent);
     Q_UNUSED(mode);
-    return { Core::Id("Test Run ID") };
+    if (canHandle(parent))
+        return { Core::Id("NimRunId") };
+    return {};
 }
 
 QString NimRunConfigurationFactory::displayNameForId(Core::Id id) const
@@ -27,15 +28,8 @@ QString NimRunConfigurationFactory::displayNameForId(Core::Id id) const
 
 bool NimRunConfigurationFactory::canCreate(ProjectExplorer::Target *parent, Core::Id id) const
 {
-    if (!canHandle(parent))
-        return false;
-
-    QString idStr = id.toString();
-
-    auto project = dynamic_cast<NimProject*>(parent->project());
-    Q_ASSERT(project);
-
-    return true;
+    Q_UNUSED(id);
+    return canHandle(parent);
 }
 
 bool NimRunConfigurationFactory::canRestore(ProjectExplorer::Target *parent,
@@ -43,7 +37,7 @@ bool NimRunConfigurationFactory::canRestore(ProjectExplorer::Target *parent,
 {
     Q_UNUSED(parent);
     Q_UNUSED(map);
-    return true;
+    return canHandle(parent);
 }
 
 bool NimRunConfigurationFactory::canClone(ProjectExplorer::Target *parent,
@@ -65,7 +59,7 @@ ProjectExplorer::RunConfiguration *NimRunConfigurationFactory::clone(ProjectExpl
 bool NimRunConfigurationFactory::canHandle(ProjectExplorer::Target *parent) const
 {
     Q_UNUSED(parent);
-    return true;
+    return qobject_cast<NimProject*>(parent->project());
 }
 
 ProjectExplorer::RunConfiguration *NimRunConfigurationFactory::doCreate(ProjectExplorer::Target *parent,

@@ -51,7 +51,7 @@ void NimCompilerBuildStepConfigWidget::onTargetChanged(int index)
 {
     Q_UNUSED(index);
 
-    auto bc = dynamic_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
+    auto bc = qobject_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
     Q_ASSERT(bc);
 
     auto data = m_ui->targetComboBox->currentData();
@@ -61,7 +61,7 @@ void NimCompilerBuildStepConfigWidget::onTargetChanged(int index)
 
 void NimCompilerBuildStepConfigWidget::connectBuildConfigurationSignals()
 {
-    auto bc = dynamic_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
+    auto bc = qobject_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
     Q_ASSERT(bc);
 
     connect(bc, SIGNAL(targetNimFileChanged(Utils::FileName)), this, SLOT(updateUI()));
@@ -80,7 +80,7 @@ void NimCompilerBuildStepConfigWidget::updateUI()
 
 void NimCompilerBuildStepConfigWidget::onAdditionalArgumentsTextEdited(const QString &text)
 {
-    auto bc = dynamic_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
+    auto bc = qobject_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
     Q_ASSERT(bc);
     bc->setUserCompilerOptions(text.split(QChar::Space));
 }
@@ -105,7 +105,7 @@ void NimCompilerBuildStepConfigWidget::updateTargetComboBox()
 {
     using namespace ProjectExplorer;
 
-    auto project = dynamic_cast<NimProject*>(m_buildStep->project());
+    auto project = qobject_cast<NimProject*>(m_buildStep->project());
 
     // Save current selected file
     QVariant currentFile;
@@ -129,7 +129,7 @@ void NimCompilerBuildStepConfigWidget::updateAdditionalArgumentsLineEdit()
 {
     using namespace ProjectExplorer;
 
-    auto bc = dynamic_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
+    auto bc = qobject_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
     Q_ASSERT(bc);
 
     m_ui->additionalArgumentsLineEdit->setText(bc->userCompilerOptions().join(QChar::Space));
@@ -138,7 +138,7 @@ void NimCompilerBuildStepConfigWidget::updateAdditionalArgumentsLineEdit()
 void NimCompilerBuildStepConfigWidget::updateBuildTypeComboBox()
 {
     using namespace ProjectExplorer;
-    auto bc = dynamic_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
+    auto bc = qobject_cast<NimBuildConfiguration*>(m_buildStep->buildConfiguration());
     Q_ASSERT(bc);
     m_ui->buildTypeComboBox->setCurrentIndex(bc->buildType() == BuildConfiguration::Debug ? 0 : 1);
 }

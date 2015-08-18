@@ -79,7 +79,7 @@ bool NimRunConfiguration::fromMap(const QVariantMap &map)
 
 void NimRunConfiguration::connectBuildConfigurationSignals()
 {
-    auto buildConfiguration = dynamic_cast<NimBuildConfiguration*>(activeBuildConfiguration());
+    auto buildConfiguration = qobject_cast<NimBuildConfiguration*>(activeBuildConfiguration());
     Q_ASSERT(buildConfiguration);
     connect(buildConfiguration, SIGNAL(buildDirectoryChanged()), this, SLOT(updateConfiguration()));
     connect(buildConfiguration, SIGNAL(targetNimFileChanged(Utils::FileName)), this, SLOT(updateConfiguration()));
@@ -127,7 +127,7 @@ void NimRunConfiguration::setRunInTerminal(bool runInTerminal)
 
 void NimRunConfiguration::updateConfiguration()
 {
-    auto buildConfiguration = dynamic_cast<NimBuildConfiguration*>(activeBuildConfiguration());
+    auto buildConfiguration = qobject_cast<NimBuildConfiguration*>(activeBuildConfiguration());
     Q_ASSERT(buildConfiguration);
     Utils::FileName outFile = buildConfiguration->outFilePath();
     QFileInfo outFileInfo = outFile.toFileInfo();
