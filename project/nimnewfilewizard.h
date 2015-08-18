@@ -19,7 +19,7 @@ protected:
                                        QString *errorMessage) const Q_DECL_OVERRIDE;
 
     bool postGenerateFiles(const QWizard *wizard,
-                           const Core::GeneratedFiles &files, QString *errorMessage) Q_DECL_OVERRIDE;
+                           const Core::GeneratedFiles &files, QString *errorMessage) const Q_DECL_OVERRIDE;
 };
 
 }

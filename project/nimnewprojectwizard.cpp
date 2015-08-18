@@ -7,32 +7,31 @@
 #include <utils/filewizardpage.h>
 #include <QDebug>
 #include <QDir>
+#include <QCoreApplication>
 
 namespace NimPlugin {
 
 NimNewProjectWizard::NimNewProjectWizard()
 {
-    setWizardKind(Core::IWizardFactory::ProjectWizard);
-    setDisplayName(tr("Create a new Nim Project"));
-    setId(QStringLiteral("Z.Nim"));
-    setDescription(tr("Creates a new Nim project."));
+    setId("Z.NimNewProjectWizard");
     setCategory(QLatin1String(ProjectExplorer::Constants::QT_PROJECT_WIZARD_CATEGORY));
-    setDisplayCategory(QLatin1String(ProjectExplorer::Constants::QT_PROJECT_WIZARD_CATEGORY_DISPLAY));
+    setDisplayCategory(QCoreApplication::translate("ProjectExplorer",
+                                                   ProjectExplorer::Constants::QT_PROJECT_WIZARD_CATEGORY_DISPLAY));
+    setDisplayName(tr("Create a new Nim Project"));
+    setDescription(tr("Creates a new Nim project."));
+    setWizardKind(Core::IWizardFactory::ProjectWizard);
     setIcon(QIcon(QLatin1String(Constants::C_NIM_ICON_PATH)));
 }
 
 Core::BaseFileWizard *NimNewProjectWizard::create(QWidget *parent,
                                                      const Core::WizardDialogParameters &parameters) const
 {
-    auto result = new Core::BaseFileWizard(parent);
+    auto result = new Core::BaseFileWizard(this, parameters.extraValues(), parent);
     result->setWindowTitle(displayName());
 
     auto page = new Utils::FileWizardPage;
     page->setPath(parameters.defaultPath());
     result->addPage(page);
-
-    foreach (QWizardPage *p, parameters.extensionPages())
-        result->addPage(p);
 
     return result;
 }
@@ -63,7 +62,7 @@ Core::GeneratedFiles NimNewProjectWizard::generateFiles(const QWizard *widget, Q
     return result;
 }
 
-bool NimNewProjectWizard::postGenerateFiles(const QWizard*, const Core::GeneratedFiles &files, QString *errorMessage)
+bool NimNewProjectWizard::postGenerateFiles(const QWizard*, const Core::GeneratedFiles &files, QString *errorMessage) const
 {
     return ProjectExplorer::CustomProjectWizard::postGenerateOpen(files, errorMessage);
 }
