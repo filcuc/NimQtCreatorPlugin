@@ -13,6 +13,7 @@
 #include <coreplugin/coreconstants.h>
 #include <coreplugin/fileiconprovider.h>
 #include <coreplugin/id.h>
+#include <coreplugin/iwizardfactory.h>
 #include <coreplugin/editormanager/editormanager.h>
 #include <extensionsystem/pluginmanager.h>
 #include <texteditor/texteditorconstants.h>
@@ -45,11 +46,16 @@ bool NimPlugin::initialize(const QStringList &arguments, QString *errorMessage)
 
     addAutoReleasedObject(new NimEditorFactory);
     addAutoReleasedObject(new NimProjectManager);
-    addAutoReleasedObject(new NimImportProjectWizardFactory);
-    addAutoReleasedObject(new NimNewProjectWizardFactory);
-    addAutoReleasedObject(new NimNewFileWizardFactory);
     addAutoReleasedObject(new NimBuildConfigurationFactory);
     addAutoReleasedObject(new NimRunConfigurationFactory);
+
+    Core::IWizardFactory::registerFactoryCreator([]() {
+        return QList<Core::IWizardFactory *>{
+            new NimNewFileWizardFactory,
+            new NimNewProjectWizardFactory,
+            new NimImportProjectWizardFactory
+        };
+    });
 
     // Initialize editor actions handler
     // Add MIME overlay icons (these icons displayed at Project dock panel)
