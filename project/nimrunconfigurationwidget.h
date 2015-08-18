@@ -2,9 +2,11 @@
 
 #include <QWidget>
 
+QT_BEGIN_NAMESPACE
 namespace Ui {
 class NimRunConfigurationWidget;
 }
+QT_END_NAMESPACE
 
 namespace NimPlugin {
 

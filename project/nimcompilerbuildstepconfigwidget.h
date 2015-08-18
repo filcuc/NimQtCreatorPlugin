@@ -2,9 +2,11 @@
 
 #include <projectexplorer/buildstep.h>
 
+QT_BEGIN_NAMESPACE
 namespace Ui {
     class NimCompilerBuildStepConfigWidget;
 }
+QT_END_NAMESPACE
 
 namespace NimPlugin {
 
