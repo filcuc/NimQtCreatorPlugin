@@ -1,4 +1,4 @@
-#include "project/nimnewprojectwizard.h"
+#include "project/nimnewprojectwizardfactory.h"
 #include "nimpluginconstants.h"
 
 #include <coreplugin/basefilewizard.h>
@@ -11,7 +11,7 @@
 
 namespace NimPlugin {
 
-NimNewProjectWizard::NimNewProjectWizard()
+NimNewProjectWizardFactory::NimNewProjectWizardFactory()
 {
     setId("Z.NimNewProjectWizard");
     setCategory(QLatin1String(ProjectExplorer::Constants::QT_PROJECT_WIZARD_CATEGORY));
@@ -23,7 +23,7 @@ NimNewProjectWizard::NimNewProjectWizard()
     setIcon(QIcon(QLatin1String(Constants::C_NIM_ICON_PATH)));
 }
 
-Core::BaseFileWizard *NimNewProjectWizard::create(QWidget *parent,
+Core::BaseFileWizard *NimNewProjectWizardFactory::create(QWidget *parent,
                                                      const Core::WizardDialogParameters &parameters) const
 {
     auto result = new Core::BaseFileWizard(this, parameters.extraValues(), parent);
@@ -36,7 +36,7 @@ Core::BaseFileWizard *NimNewProjectWizard::create(QWidget *parent,
     return result;
 }
 
-Core::GeneratedFiles NimNewProjectWizard::generateFiles(const QWizard *widget, QString *) const
+Core::GeneratedFiles NimNewProjectWizardFactory::generateFiles(const QWizard *widget, QString *) const
 {
     const auto wizard = qobject_cast<const Core::BaseFileWizard *>(widget);
     const auto page = wizard->find<Utils::FileWizardPage>();
@@ -62,7 +62,7 @@ Core::GeneratedFiles NimNewProjectWizard::generateFiles(const QWizard *widget, Q
     return result;
 }
 
-bool NimNewProjectWizard::postGenerateFiles(const QWizard*, const Core::GeneratedFiles &files, QString *errorMessage) const
+bool NimNewProjectWizardFactory::postGenerateFiles(const QWizard*, const Core::GeneratedFiles &files, QString *errorMessage) const
 {
     return ProjectExplorer::CustomProjectWizard::postGenerateOpen(files, errorMessage);
 }

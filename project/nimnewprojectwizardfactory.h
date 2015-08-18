@@ -4,12 +4,12 @@
 
 namespace NimPlugin {
 
-class NimNewProjectWizard Q_DECL_FINAL : public Core::BaseFileWizardFactory
+class NimNewProjectWizardFactory Q_DECL_FINAL : public Core::BaseFileWizardFactory
 {
     Q_OBJECT
 
 public:
-    NimNewProjectWizard();
+    NimNewProjectWizardFactory();
 
 protected:
     Core::BaseFileWizard *create(QWidget *parent,

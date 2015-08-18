@@ -32,9 +32,9 @@ HEADERS += \
     project/nimproject.h \
     project/nimprojectmanager.h \
     project/nimprojectnode.h \
-    project/nimimportprojectwizard.h \
-    project/nimnewprojectwizard.h \
-    project/nimnewfilewizard.h \
+    project/nimimportprojectwizardfactory.h \
+    project/nimnewprojectwizardfactory.h \
+    project/nimnewfilewizardfactory.h \
     project/nimbuildconfiguration.h \
     project/nimbuildconfigurationfactory.h \
     project/nimbuildinfo.h \
@@ -55,9 +55,9 @@ SOURCES += \
     project/nimproject.cpp \
     project/nimprojectmanager.cpp \
     project/nimprojectnode.cpp \
-    project/nimimportprojectwizard.cpp \
-    project/nimnewprojectwizard.cpp \
-    project/nimnewfilewizard.cpp \
+    project/nimimportprojectwizardfactory.cpp \
+    project/nimnewprojectwizardfactory.cpp \
+    project/nimnewfilewizardfactory.cpp \
     project/nimbuildconfiguration.cpp \
     project/nimbuildconfigurationfactory.cpp \
     project/nimbuildinfo.cpp \

@@ -3,9 +3,9 @@
 #include "editor/nimeditor.h"
 #include "editor/nimhighlighter.h"
 #include "project/nimprojectmanager.h"
-#include "project/nimimportprojectwizard.h"
-#include "project/nimnewprojectwizard.h"
-#include "project/nimnewfilewizard.h"
+#include "project/nimimportprojectwizardfactory.h"
+#include "project/nimnewprojectwizardfactory.h"
+#include "project/nimnewfilewizardfactory.h"
 #include "project/nimbuildconfigurationfactory.h"
 #include "project/nimrunconfigurationfactory.h"
 
@@ -45,9 +45,9 @@ bool NimPlugin::initialize(const QStringList &arguments, QString *errorMessage)
 
     addAutoReleasedObject(new NimEditorFactory);
     addAutoReleasedObject(new NimProjectManager);
-    addAutoReleasedObject(new NimImportProjectWizard);
-    addAutoReleasedObject(new NimNewProjectWizard);
-    addAutoReleasedObject(new NimNewFileWizard);
+    addAutoReleasedObject(new NimImportProjectWizardFactory);
+    addAutoReleasedObject(new NimNewProjectWizardFactory);
+    addAutoReleasedObject(new NimNewFileWizardFactory);
     addAutoReleasedObject(new NimBuildConfigurationFactory);
     addAutoReleasedObject(new NimRunConfigurationFactory);
 
