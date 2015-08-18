@@ -15,5 +15,4 @@ At the moment the plugin offers:
 * cd build
 * qmake ../path/to/nimeditor/source_dir
 * make
-* make install
-* copy the plugin in your QtCreator plugin dir
+* If everything works you should have the plugin available in QtCreator inside the QTC_BUILD directory
