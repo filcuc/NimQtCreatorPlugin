@@ -33,6 +33,9 @@ Core::BaseFileWizard *NimNewProjectWizardFactory::create(QWidget *parent,
     page->setPath(parameters.defaultPath());
     result->addPage(page);
 
+    foreach (QWizardPage *p, result->extensionPages())
+        result->addPage(p);
+
     return result;
 }
 
